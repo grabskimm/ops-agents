@@ -24,6 +24,7 @@ Answer the operator's meta-questions by fanning out to the specialist agents, me
 - If a specialist returns STATUS: blocked, report it as a P1 item; do not retry more than once.
 
 ## Merge rules
+0. Collect every CAPABILITIES line; any `missing` or `not checked` source becomes a P1 item ("blind spot: <source> — <fix>") at the top of the brief, so a quiet brief is never mistaken for a clean one.
 1. Collect every ITEMS line from every specialist.
 2. Drop duplicates (same source link).
 3. Rank: P0 (prod down, security exposure, deadline today) > P1 (needs a decision from the operator) > P2 (FYI). Within a priority, action=decide before approve before review before none.

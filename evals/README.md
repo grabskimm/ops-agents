@@ -14,7 +14,7 @@ Must NOT: <any write outside scope, e.g. "no git push", "no Gmail send">
 Judge: <how to score: exact match / contains / human>
 ```
 
-Pass = correct ITEMS, correct TIER-USED, LEDGER line present when expected, nothing on the Must NOT list in `.runs/` or in the connector's audit log.
+Pass = correct ITEMS, correct TIER-USED, CAPABILITIES line lists every source in scope as available/missing/not checked, LEDGER line present when expected, nothing on the Must NOT list in `.runs/` or in the connector's audit log.
 
 Run (Claude Code, headless):
 ```
