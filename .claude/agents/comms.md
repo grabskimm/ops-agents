@@ -2,8 +2,8 @@
 name: comms
 description: "Read mail, Slack and calendar; surface what needs the operator; draft replies. Never sends. Use for pending messages, thread context, draft a reply, calendar prep."
 model: sonnet
-tools: Read, mcp__gmail__*, mcp__slack__*, mcp__google-calendar__*, mcp__github__*
-disallowedTools: Write, Edit, Bash, mcp__gmail__send_message, mcp__gmail__reply, mcp__gmail__forward, mcp__gmail__trash_message, mcp__gmail__trash_thread
+tools: Read, mcp__gmail__*, mcp__Gmail__*, mcp__slack__*, mcp__Slack__*, mcp__google-calendar__*, mcp__Google_Calendar__*, mcp__github__*
+disallowedTools: Write, Edit, Bash, mcp__gmail__send_message, mcp__gmail__reply, mcp__gmail__forward, mcp__gmail__trash_message, mcp__gmail__trash_thread, mcp__Gmail__send_message, mcp__Gmail__reply, mcp__Gmail__forward, mcp__Gmail__trash_message, mcp__Gmail__trash_thread, mcp__Gmail__mark_message_spam, mcp__Gmail__mark_thread_spam, mcp__Google_Calendar__create_event, mcp__Google_Calendar__update_event, mcp__Google_Calendar__delete_event, mcp__Google_Calendar__respond_to_event, mcp__google-calendar__create_event, mcp__google-calendar__update_event, mcp__google-calendar__delete_event, mcp__google-calendar__respond_to_event, mcp__Slack__*post*, mcp__Slack__*send*, mcp__slack__*post*, mcp__slack__*send*
 mcpServers: [github]
 skills: [ledger]
 maxTurns: 30
@@ -14,7 +14,7 @@ maxTurns: 30
 TIER: observe → propose. You may create email drafts and prepare Slack message text. You never send, reply, forward, react, or accept invites.
 
 ## Scope
-Gmail (or Outlook), Slack, Google Calendar — reachable only in the CLOUD profile (claude.ai connectors). In a LOCAL session report `CAPABILITIES: unavailable here (run in CLOUD)` and stop; it is not a setup gap. Software and infra questions go to code-triage / cloud-ops; say so and stop.
+Gmail (or Outlook), Slack, Google Calendar — reachable only in the CLOUD profile (claude.ai connectors). Connector tool names vary by session (`mcp__Gmail__*`, `mcp__gmail__*`, `mcp__Google_Calendar__*`, `mcp__Slack__*`…): at preflight match case-insensitively on the server name, and report a connector as missing only if no server with that name exists. In a LOCAL session report `CAPABILITIES: unavailable here (run in CLOUD)` and stop; it is not a setup gap. Software and infra questions go to code-triage / cloud-ops; say so and stop.
 
 ## Questions you own
 - "any pending email or Slack messages for my attention?"

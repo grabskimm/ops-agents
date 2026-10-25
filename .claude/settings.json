@@ -65,7 +65,9 @@
       "Bash(gh issue edit *)",
       "mcp__github-rw__*",
       "mcp__gmail__create_draft",
-      "mcp__gmail__update_draft"
+      "mcp__gmail__update_draft",
+      "mcp__Gmail__create_draft",
+      "mcp__Gmail__update_draft"
     ],
     "deny": [
       "Bash(git push * main*)",
@@ -118,7 +120,22 @@
       "Bash(gcloud auth login*)",
       "Bash(gcloud config set *)",
       "Bash(kubectl config use-context *)",
-      "Bash(kubectl config set-context *)"
+      "Bash(kubectl config set-context *)",
+      "mcp__Gmail__send_message",
+      "mcp__Gmail__reply",
+      "mcp__Gmail__forward",
+      "mcp__Gmail__trash_message",
+      "mcp__Gmail__trash_thread",
+      "mcp__Gmail__mark_message_spam",
+      "mcp__Gmail__mark_thread_spam",
+      "mcp__Google_Calendar__create_event",
+      "mcp__Google_Calendar__update_event",
+      "mcp__Google_Calendar__delete_event",
+      "mcp__Google_Calendar__respond_to_event",
+      "mcp__google-calendar__create_event",
+      "mcp__google-calendar__update_event",
+      "mcp__google-calendar__delete_event",
+      "mcp__google-calendar__respond_to_event"
     ]
   },
   "hooks": {

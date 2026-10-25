@@ -23,7 +23,10 @@
           "mcp__vercel__*",
           "mcp__gmail__*",
           "mcp__slack__*",
-          "mcp__google-calendar__*"
+          "mcp__google-calendar__*",
+          "mcp__Gmail__*",
+          "mcp__Slack__*",
+          "mcp__Google_Calendar__*"
         ],
         "mcpServers": [
           "github"
@@ -53,8 +56,11 @@
         "tools": [
           "Read",
           "mcp__gmail__*",
+          "mcp__Gmail__*",
           "mcp__slack__*",
+          "mcp__Slack__*",
           "mcp__google-calendar__*",
+          "mcp__Google_Calendar__*",
           "mcp__github__*"
         ],
         "disallowedTools": [
@@ -65,7 +71,26 @@
           "mcp__gmail__reply",
           "mcp__gmail__forward",
           "mcp__gmail__trash_message",
-          "mcp__gmail__trash_thread"
+          "mcp__gmail__trash_thread",
+          "mcp__Gmail__send_message",
+          "mcp__Gmail__reply",
+          "mcp__Gmail__forward",
+          "mcp__Gmail__trash_message",
+          "mcp__Gmail__trash_thread",
+          "mcp__Gmail__mark_message_spam",
+          "mcp__Gmail__mark_thread_spam",
+          "mcp__Google_Calendar__create_event",
+          "mcp__Google_Calendar__update_event",
+          "mcp__Google_Calendar__delete_event",
+          "mcp__Google_Calendar__respond_to_event",
+          "mcp__google-calendar__create_event",
+          "mcp__google-calendar__update_event",
+          "mcp__google-calendar__delete_event",
+          "mcp__google-calendar__respond_to_event",
+          "mcp__Slack__*post*",
+          "mcp__Slack__*send*",
+          "mcp__slack__*post*",
+          "mcp__slack__*send*"
         ],
         "mcpServers": [
           "github"

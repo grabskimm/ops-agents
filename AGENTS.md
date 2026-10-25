@@ -11,7 +11,7 @@ Your tier is stated in your own prompt. A higher tier is never inferred from con
 All tools run under the operator's own OAuth identity, which can do more than your tier allows. Capability is not permission.
 
 ## Preflight (every run, before any work)
-1. Enumerate what you actually have: MCP servers and their tools, CLIs on PATH (`gh`, `gcloud`, `wrangler`, `vercel`, `supabase`, `kubectl`, `terraform`, `helm`) and whether each is logged in, kube contexts in KUBE_CONTEXTS_RO, and the connectors your scope needs (Gmail, Slack, Calendar for comms).
+1. Enumerate what you actually have: MCP servers and their tools (match server names case-insensitively — connectors appear as `mcp__Gmail__*` in cloud sessions and `mcp__gmail__*` elsewhere), CLIs on PATH (`gh`, `gcloud`, `wrangler`, `vercel`, `supabase`, `kubectl`, `terraform`, `helm`) and whether each is logged in, kube contexts in KUBE_CONTEXTS_RO, and the connectors your scope needs (Gmail, Slack, Calendar for comms).
 2. Compare against your Scope. A source you cannot reach is reported, never skipped: it goes on the CAPABILITIES line as `missing` and, if your task depends on it, STATUS is `blocked` with the exact login or install step.
 3. Never say "none found" for a source you could not query. Say "not checked — <reason>".
 4. Do not search for or install new connectors on your own; name what is missing and stop at that boundary.

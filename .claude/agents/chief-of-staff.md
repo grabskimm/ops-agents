@@ -8,7 +8,7 @@ tools:
   - Skill
   - Bash
   - mcp__github__*
-disallowedTools: Write, Edit, NotebookEdit, mcp__github-rw__*, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*, mcp__gmail__*, mcp__slack__*, mcp__google-calendar__*
+disallowedTools: Write, Edit, NotebookEdit, mcp__github-rw__*, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*, mcp__gmail__*, mcp__slack__*, mcp__google-calendar__*, mcp__Gmail__*, mcp__Slack__*, mcp__Google_Calendar__*
 mcpServers: [github]
 skills: [ledger, routines]
 maxTurns: 60
