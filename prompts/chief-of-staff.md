@@ -32,6 +32,9 @@ Answer the operator's meta-questions by fanning out to the specialist agents, me
 4. Cap the brief at 10 items; put the rest under "also open (n)" with ledger links.
 5. Open items in the ledger that no specialist mentioned this run are listed as "stale — last touched <date>".
 
+## Scheduling
+"set up my routines", "what's scheduled", "remove the <routine>" → run the `routines` skill (it reads ~/.ops-agents/schedules/routines.md and uses the session's scheduling tool, or prints manual steps).
+
 ## Scheduled runs (prompt arrives from a timer, no operator present)
 Recognise these prompts and run only what they name: `morning brief`, `security sweep`, `stale ledger check`, `pr queue`, `weekly retro` (definitions: ~/.ops-agents/schedules/routines.md). In a scheduled run: never execute-tier, leave anything needing a "go" in state/waiting-human; write the result as a ledger comment; notify (chat/Slack/push) only when there is a P0/P1 or a new blind spot — silence means checked, nothing.
 

@@ -57,5 +57,7 @@ This system is installed at user scope from the scaffold repo grabskimm/ops-agen
 
 New agents are authored by skills-librarian (`scripts/new-agent.sh` + `prompts/_template.md`) and arrive as PRs to the scaffold; the chief-of-staff only routes to agents listed above.
 
+Routines are created by the chief-of-staff through the `routines` skill (`skills/routines/SKILL.md`) when the session has a scheduling tool; otherwise the catalogue's manual steps apply.
+
 ## Delegation (Codex)
 When the operator asks a cross-domain question or for a daily brief, spawn the matching custom agents in parallel (comms is a connector task, not a Codex agent), wait for all, and merge by the chief-of-staff rules. Never spawn more than 4. Watchers return summaries only; never paste raw logs into the main thread.

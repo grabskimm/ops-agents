@@ -1,6 +1,6 @@
 # Scheduled routines
 
-The Chief of Staff handles every prompt below; the timer only sends it. Create each routine once in the platform (not scriptable today), using exactly the prompt text — the agent keys its behaviour off it.
+The Chief of Staff handles every prompt below; the timer only sends it. To create the timers, say **"set up my routines"** (or `/routines`) in a Claude app or Claude Code remote session: the `routines` skill reads this file, lists what exists, and creates the missing ones after your "go". Where no scheduling tool exists (local CLI, Codex) it prints the manual steps from the section at the end instead.
 
 | Routine | Cadence | Prompt to send | What the Chief of Staff does |
 | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ Rules (also in the chief-of-staff prompt):
 
 Set `<ZONE>` once (IANA name) when creating the routines; all five use the same zone.
 
-## Where to create them
+## Where to create them by hand (when the session has no scheduling tool)
 - Claude Code (cloud routines, min interval 1 h, run without your laptop): Code tab → Routines → new → cadence, prompt, agent `chief-of-staff`. Claude Code Desktop routines run locally when the app is open.
 - Claude app scheduled tasks: same prompts; each run starts a fresh session with the installed `~/.claude` config.
 - Claude Tag (Slack): `@Claude` in `#ops-agents`: "every weekday at 10:00 <ZONE> run: morning brief" — results post in the channel.

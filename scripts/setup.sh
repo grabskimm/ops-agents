@@ -73,7 +73,7 @@ cat <<EOF
 == remaining manual steps
 Claude Code:
   - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar (OAuth)
-  - Claude Code → Routines: create each row of $OPS/schedules/routines.md (prompt text verbatim, agent chief-of-staff)
+  - routines: in a Claude app / Claude Code remote session say "set up my routines" (skill creates them); CLI-only → Routines page by hand from $OPS/schedules/routines.md
   - Slack: install Claude Tag, invite to #ops-agents
   - claude → /mcp → authenticate cloudflare, vercel, supabase (OAuth, once)
   - run:  claude --agent chief-of-staff     (from any directory)
