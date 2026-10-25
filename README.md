@@ -18,6 +18,7 @@ scripts/check-auth.sh  warns for CLIs not logged in (OAuth), proves read-only ku
 skills/<name>/SKILL.md shared skills → ~/.ops-agents/skills, symlinked from ~/.claude/skills and ~/.agents/skills
 hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log → ~/.ops-agents/runs)
 evals/                 known-answer cases per agent
+schedules/routines.md  the timer prompts the chief-of-staff handles (brief, sweep, stale check, PR nudge, retro) and where to create them
 .env.example           selectors only (project ref, GCP projects, read-only kube contexts) → ~/.ops-agents/.env
 ```
 

@@ -65,7 +65,7 @@ cat <<EOF
 == remaining manual steps
 Claude Code:
   - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar (OAuth)
-  - Claude Code → Routines: weekdays 10:00 local, prompt "morning brief", agent chief-of-staff
+  - Claude Code → Routines: create each row of $OPS/schedules/routines.md (prompt text verbatim, agent chief-of-staff)
   - Slack: install Claude Tag, invite to #ops-agents
   - claude → /mcp → authenticate cloudflare, vercel, supabase (OAuth, once)
   - run:  claude --agent chief-of-staff     (from any directory)
@@ -73,7 +73,7 @@ Codex:
   - codex plugin install gmail slack google-calendar
   - add  set -a; . $OPS/.env; set +a  to your shell profile (Codex reads \${GH_OAUTH_TOKEN}, \${SUPABASE_PROJECT_REF} from env)
   - codex mcp login cloudflare && codex mcp login vercel && codex mcp login supabase
-  - ChatGPT Work thread: scheduled task weekdays 10:00 local, "morning brief"
+  - ChatGPT Work thread: one scheduled task per row of $OPS/schedules/routines.md
   - Slack / GitHub: Codex Slack integration, Codex GitHub app
   - run:  codex     (from any directory)
 done.

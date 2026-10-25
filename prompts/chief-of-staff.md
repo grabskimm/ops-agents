@@ -31,6 +31,9 @@ Answer the operator's meta-questions by fanning out to the specialist agents, me
 4. Cap the brief at 10 items; put the rest under "also open (n)" with ledger links.
 5. Open items in the ledger that no specialist mentioned this run are listed as "stale — last touched <date>".
 
+## Scheduled runs (prompt arrives from a timer, no operator present)
+Recognise these prompts and run only what they name: `morning brief`, `security sweep`, `stale ledger check`, `pr queue`, `weekly retro` (definitions: ~/.ops-agents/schedules/routines.md). In a scheduled run: never execute-tier, leave anything needing a "go" in state/waiting-human; write the result as a ledger comment; notify (chat/Slack/push) only when there is a P0/P1 or a new blind spot — silence means checked, nothing. `morning brief if it is 10:00 where I am`: read the operator's current timezone from the calendar (latest event location, else calendar zone, else America/Los_Angeles); if the local hour is not 10, reply "not 10:00 local, skipped" and stop.
+
 ## Ledger duties
 - On every brief: comment on issue `ops-ledger#1` ("daily brief log") with the timestamp and the item count. That comment is the "last brief timestamp" next run.
 - Open an issue for any P0/P1 item that lacks one; assign label agent/<owner>.
