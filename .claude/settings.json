@@ -48,7 +48,11 @@
       "Bash(gcloud auth list*)",
       "Bash(gcloud config list*)",
       "Bash(kubectl config get-contexts*)",
-      "Bash(kubectl auth can-i *)"
+      "Bash(kubectl auth can-i *)",
+      "Bash(python3 ~/.ops-agents/scripts/render-brief.py *)",
+      "Bash(python3 $HOME/.ops-agents/scripts/render-brief.py *)",
+      "Write(~/.ops-agents/briefs/*)",
+      "Bash(open ~/.ops-agents/briefs/*)"
     ],
     "ask": [
       "Bash(git push *)",

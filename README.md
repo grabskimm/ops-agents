@@ -25,6 +25,7 @@ scripts/check-auth.sh  warns for CLIs not logged in (OAuth), proves read-only ku
 skills/<name>/SKILL.md shared skills (ledger, routines, cos = /cos entry point) → ~/.ops-agents/skills, symlinked from ~/.claude/skills and ~/.agents/skills
 hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log → ~/.ops-agents/runs)
 evals/                 known-answer cases per agent
+scripts/render-brief.py + templates/brief.schema.md   the brief as a self-contained HTML page (~/.ops-agents/briefs/), published as an artifact where the session has one
 schedules/routines.md  the timer prompts the chief-of-staff handles (brief, sweep, stale check, PR nudge, retro); skills/routines creates them via the session's scheduling tool
 .env.example           selectors only (project ref, GCP projects, read-only kube contexts) → ~/.ops-agents/.env
 ```

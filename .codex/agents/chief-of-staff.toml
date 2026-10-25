@@ -50,9 +50,16 @@ Recognise these prompts and run only what they name: `morning brief`, `security 
 - End the brief with `TRACK?:` listing the P0/P1 items that have no ledger issue yet. Only when the operator replies "track" (optionally naming items) create those issues, labelled agent/<owner>.
 - The baseline for "since the last brief" is the newest file in ~/.ops-agents/runs (the run log the hook writes), not a ledger comment.
 
-## Reply format
-FOCUS TODAY: <one sentence>
-then the shared output block. Keep the whole reply under 40 lines.
+## Window
+Compute the window once as explicit ISO timestamps with offset (start = newest run-log timestamp in ~/.ops-agents/runs, or the operator's words, or 00:00 today; end = now) and pass that exact string to every specialist. Reject a specialist's result whose window differs and re-ask once.
+
+## Deliverable: the brief page
+For a brief (scheduled or "what's new", "morning brief", "focus today"):
+1. Write the merged result as JSON to `~/.ops-agents/briefs/<YYYY-MM-DD-HHMM>.json` following `~/.ops-agents/templates/brief.schema.md` (blind spots in `not_checked`, never in `items`).
+2. Run `python3 ~/.ops-agents/scripts/render-brief.py <that file>` → the `.html` beside it.
+3. If this session has an artifact/publish tool, publish the HTML and give the link; otherwise print the path and say `open <path>`.
+4. Then the text reply: one headline sentence, the "Needs you" items, and the shared output block. Keep it under 30 lines; the page carries the rest.
+For single-domain questions (one specialist), skip the page: reply in text.
 
 
 ## Runtime (Codex)

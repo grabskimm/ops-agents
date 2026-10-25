@@ -56,7 +56,7 @@ python3 "$SRC/scripts/build-agents.py" >/dev/null && ok "agent files generated f
 echo "== ~/.ops-agents"
 mkdir -p "$OPS/runs"
 rm -rf "$OPS/hooks" "$OPS/skills" "$OPS/prompts"
-cp -R "$SRC/hooks" "$OPS/hooks"; cp -R "$SRC/skills" "$OPS/skills"; cp -R "$SRC/prompts" "$OPS/prompts"; rm -rf "$OPS/schedules"; cp -R "$SRC/schedules" "$OPS/schedules"
+cp -R "$SRC/hooks" "$OPS/hooks"; cp -R "$SRC/skills" "$OPS/skills"; cp -R "$SRC/prompts" "$OPS/prompts"; rm -rf "$OPS/schedules" "$OPS/templates" "$OPS/scripts"; cp -R "$SRC/schedules" "$OPS/schedules"; cp -R "$SRC/templates" "$OPS/templates"; mkdir -p "$OPS/scripts" "$OPS/briefs"; cp "$SRC/scripts/render-brief.py" "$OPS/scripts/"; chmod +x "$OPS/scripts/render-brief.py"
 cp "$SRC/AGENTS.md" "$OPS/AGENTS.md"; cp "$SRC/agents.json" "$OPS/agents.json"; cp "$SRC/.env.example" "$OPS/.env.example"
 [[ -f "$OPS/.env" ]] || { cp "$SRC/.env.example" "$OPS/.env"; warn "$OPS/.env created from template — set SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO"; }
 chmod +x "$OPS"/hooks/*.sh
