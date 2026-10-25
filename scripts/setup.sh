@@ -52,11 +52,6 @@ if [[ $DO_LEDGER -eq 1 ]]; then
   for s in open waiting-human running done; do mk "state/$s" e4e669 "task state"; done
   for s in gmail slack gcp cf supabase vercel github; do mk "src/$s" bfd4f2 "source system"; mk "sec/$s" d93f0b "security finding source"; done
   ok "labels ensured"
-  if [[ "$(gh issue list -R "$LEDGER" --search 'daily brief log in:title' --state all --json number --jq length 2>/dev/null || echo 0)" == "0" ]]; then
-    gh issue create -R "$LEDGER" --title "daily brief log" --label agent/chief-of-staff --body "chief-of-staff comments here after every brief. Newest comment = baseline window for the next run." >/dev/null 2>&1 && ok "issue 'daily brief log' created" || warn "could not create the 'daily brief log' issue"
-  else ok "issue 'daily brief log' exists"; fi
-  n="$(gh issue list -R "$LEDGER" --search 'daily brief log in:title' --state all --json number --jq '.[0].number' 2>/dev/null || echo 1)"
-  [[ "$n" != "1" ]] && warn "daily brief log is issue #$n, not #1 — update prompts/chief-of-staff.md and skills/ledger/SKILL.md"
 fi
 
 if [[ $DO_INSTALL -eq 1 ]]; then

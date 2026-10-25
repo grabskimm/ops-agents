@@ -70,4 +70,4 @@ claude -p "morning brief" --agent chief-of-staff --permission-mode default --per
 
 ## Ledger
 
-`grabskimm/ops-ledger` (GitHub Issues), created by `scripts/setup.sh --ledger` with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*` and issue #1 "daily brief log". `skills/ledger/SKILL.md` has the commands.
+`grabskimm/ops-ledger` (GitHub Issues), created by `scripts/setup.sh --ledger` with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*`. Agents only read it on their own; a write needs your "track"/"go". `skills/ledger/SKILL.md` has the commands.

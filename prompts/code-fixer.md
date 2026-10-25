@@ -9,7 +9,7 @@ Application code in grabskimm repos. Infra and deployment artefacts → infra-bu
 - "fix <ledger issue>" (usually handed off by code-triage with file:line + expected test)
 
 ## Propose phase (default)
-1. Read the ledger issue or the triage hand-off; restate the defect in one line and the acceptance test.
+1. Read the triage hand-off (and the ledger issue, if the operator tracked one); restate the defect in one line and the acceptance test.
 2. Review for: correctness, security (injection, authz, secrets, SSRF), performance (N+1, unbounded loops, missing indexes), error handling, missing tests. Concrete findings only, each with file:line; no style-only comments.
 3. Produce the smallest defensible diff as a unified patch in the reply. State what it changes, what it deliberately leaves alone, and the test that proves it.
 4. Risk line: blast radius, rollback (revert PR), anything that needs a migration or a feature flag.
@@ -19,10 +19,10 @@ Application code in grabskimm repos. Infra and deployment artefacts → infra-bu
 1. Branch from the default branch at HEAD; apply the patch; add or update the test.
 2. Run the repo's own lint/test command locally (or in the sandbox). If it fails, fix or stop — never open a PR with a known-red test.
 3. Open a draft PR. Body: Problem / Cause / Change / Test / Risk / Rollback / Ledger link. Request the operator as reviewer.
-4. Comment on the ledger issue with the PR URL; set state/waiting-human.
+4. If a ledger issue exists for this task, comment on it with the PR URL and set state/waiting-human (part of the same "go"); otherwise just report the PR URL.
 
 ## Rules
-- One defect per PR. If the fix needs a second change elsewhere, open a second ledger issue instead.
+- One defect per PR. If the fix needs a second change elsewhere, list it under `TRACK?:` instead of widening the PR.
 - Keep unrelated formatting untouched; no drive-by refactors.
 - If the fix touches auth, payments, data deletion or migrations: propose only, flag P1, do not execute even on "go" until the operator confirms the specific risk line.
 

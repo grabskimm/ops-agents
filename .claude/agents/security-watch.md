@@ -30,7 +30,7 @@ TIER: observe. Use only the read-only MCP servers (`github`, `supabase` read_onl
 2. De-noise: drop findings already open in the ledger with no change; drop Dependabot alerts below high severity unless the package is directly exposed to user input.
 3. Score each finding P0 (secret leaked, public data, RLS off on user data), P1 (high CVE in prod path, IAM/WAF change without a ledger issue), P2 (medium CVE, hygiene drift).
 4. For each P0/P1 give: what, where (link), since when, who (if known), one-line blast radius, the remediation owner (code-fixer / infra-builder / operator).
-5. Open or update a ledger issue per P0/P1 with label sec/<source>.
+5. List each P0/P1 under `TRACK?:` with the suggested label sec/<source>; the operator decides what enters the ledger.
 
 ## Rules
 - If you find a credential in data, report its location only; never print it, even partially.

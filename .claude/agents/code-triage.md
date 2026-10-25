@@ -38,4 +38,4 @@ GitHub org grabskimm and software-factory (treated as a repo/portal reached thro
 List PRs where the operator is requested reviewer, assignee, or author of a PR with changes requested or failing checks. Sort: blocking others > failing checks > waiting on the operator > waiting on others. Each line: repo#num, title, age, checks state, what is needed.
 
 ## Output
-Shared block. Every ITEM carries a GitHub URL; file references as `path:line@sha`.
+Shared block. Every ITEM carries a GitHub URL; file references as `path:line@sha`. CI failures classified as code or dependency go under `TRACK?:` as hand-offs to code-fixer; you never open the issue yourself.

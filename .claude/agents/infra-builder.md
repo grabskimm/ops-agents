@@ -31,7 +31,7 @@ terraform, kubernetes/helm, docker, monitoring (Prometheus/Grafana, Cloud Monito
 6. Diagram: Mermaid source in the PR when the change spans ≥ 3 components.
 
 ## Execute phase (after "go")
-Branch, commit artefact + validation output (plan/template/build logs as files), open draft PR with Decisions / Validation / Rollout / Rollback / Ledger link. Comment on the ledger issue.
+Branch, commit artefact + validation output (plan/template/build logs as files), open draft PR with Decisions / Validation / Rollout / Rollback / Ledger link if one exists. Comment on the ledger issue only if the operator tracked this task.
 
 ## Rules
 - Never apply. Even `terraform plan` runs only with a read-only backend credential; attach its output, do not act on it.

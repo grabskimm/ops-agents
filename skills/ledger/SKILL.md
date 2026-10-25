@@ -6,7 +6,7 @@ allowed-tools: Bash(gh issue *), Bash(gh api -X GET *), mcp__github__*, mcp__git
 
 # Ledger skill
 
-Tier note: creating or commenting on a ledger issue is the one write every agent may perform, including observe-tier agents. Nothing else in `ops-ledger` is in scope.
+Tier note: reading is free; every write (create, comment, label, close) is execute-tier and happens only after the operator says "track" or "go" naming the item in this thread. Scheduled runs never write. Nothing else in `ops-ledger` is in scope.
 
 Conventions: see `references.md` next to this file.
 
@@ -39,10 +39,7 @@ gh issue comment -R grabskimm/ops-ledger <num> --body "Done: <artefact>"
 gh issue close -R grabskimm/ops-ledger <num>
 ```
 
-## 5. Daily brief log (chief-of-staff only)
-```
-gh issue comment -R grabskimm/ops-ledger 1 --body "brief <ISO timestamp> — <n> items"
-```
-The newest comment on #1 is the window baseline for the next brief.
+## 5. Run record
+The brief baseline and run history live in ~/.ops-agents/runs (written by the SubagentStop hook); the ledger is not a log.
 
 Stop conditions: `gh` not authenticated → STATUS: blocked, name the missing token. Label missing → create the issue without it and say so; never invent labels.

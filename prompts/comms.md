@@ -24,4 +24,4 @@ Gmail (or Outlook), Slack, Google Calendar. Software and infra questions go to c
 - Never commit the operator to a date, a number or a yes/no the operator has not stated in this thread; leave a `[decide: …]` placeholder.
 
 ## Output
-Shared block. In ITEMS, prefix each line with the channel: `[slack]`, `[mail]`, `[cal]`.
+Shared block. In ITEMS, prefix each line with the channel: `[slack]`, `[mail]`, `[cal]`. A missing connector is a `CAPABILITIES: missing` entry, never a TRACK? item.

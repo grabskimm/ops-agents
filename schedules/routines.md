@@ -4,15 +4,15 @@ The Chief of Staff handles every prompt below; the timer only sends it. To creat
 
 | Routine | Cadence | Prompt to send | What the Chief of Staff does |
 | --- | --- | --- | --- |
-| morning-brief | weekdays 10:00 <ZONE> | `morning brief` | fan-out to comms, cloud-ops, code-triage, security-watch since the last brief; merge; post to ledger #1 |
+| morning-brief | weekdays 10:00 <ZONE> | `morning brief` | fan-out to comms, cloud-ops, code-triage, security-watch since the last run; merge; report (run log is the record) |
 | security-sweep | daily 07:00 <ZONE> | `security sweep` | security-watch only, 24h window; P0/P1 only; silent when empty |
 | stale-ledger | weekdays 16:00 <ZONE> | `stale ledger check` | ledger items in state/waiting-human older than 2 working days → one list with the question each one is waiting on |
 | pr-nudge | weekdays 14:00 <ZONE> | `pr queue` | code-triage PR queue only; nothing else |
-| weekly-retro | Fridays 15:00 <ZONE> | `weekly retro` | ledger items closed this week by agent, blind spots seen more than twice, prompts worth editing; opens a ledger issue labelled agent/chief-of-staff |
+| weekly-retro | Fridays 15:00 <ZONE> | `weekly retro` | ledger items closed this week by agent, blind spots seen more than twice, prompts worth editing; proposes under TRACK? |
 
 Rules (also in the chief-of-staff prompt):
-- A scheduled run has no operator present: never execute-tier; anything needing a "go" is left in state/waiting-human.
-- Output goes to the ledger comment; a chat/Slack/push notification only when there is at least one P0/P1 or a new blind spot. Silence means "checked, nothing".
+- A scheduled run has no operator present: never execute-tier, never a ledger write; anything needing a "go" or "track" waits in the report.
+- Output is the report (and the run log); a chat/Slack/push notification only when there is at least one P0/P1 or a new blind spot. Silence means "checked, nothing".
 - Times shown in any brief use <ZONE>.
 
 Set `<ZONE>` once (IANA name) when creating the routines; all five use the same zone.

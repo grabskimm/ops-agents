@@ -47,10 +47,6 @@ if [[ $is_observe -eq 1 ]]; then
   fi
   case "$tool" in
     Write|Edit|NotebookEdit|mcp__github-rw__*|mcp__gmail__send_message|mcp__gmail__reply|mcp__gmail__forward|mcp__gmail__trash_*|mcp__*__create_*|mcp__*__update_*|mcp__*__delete_*|mcp__*__send_*)
-      # Ledger writes are the one exception: issue create/comment on ops-ledger via the read MCP server.
-      if [[ "$tool" == mcp__github__* ]] && printf '%s' "$input" | jq -e '.tool_input | tostring | test("ops-ledger")' >/dev/null; then
-        exit 0
-      fi
       echo "guard-observe: agent '$agent' is observe-tier; tool '$tool' mutates." >&2
       exit 2
       ;;
