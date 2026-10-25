@@ -85,6 +85,7 @@ jq --slurpfile m "$SRC/.claude/settings.json" --arg ops "$OPS" '
   | .hooks.SubagentStop = ((.hooks.SubagentStop // []) + [{"matcher":"*","hooks":[{"type":"command","command":($ops + "/hooks/ledger-touch.sh")}]}])
 ' "$S" > "$S.tmp" && mv "$S.tmp" "$S"
 ok "settings.json: permissions + hooks merged (existing entries kept)"
+set +e   # from here on: gh/MCP/OAuth steps warn, never abort
 # GH_OAUTH_TOKEN comes from gh's OAuth login; written into ~/.ops-agents/.env for the MCP headers (re-run install after a new gh auth login).
 if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
   tok="$(gh auth token 2>/dev/null || true)"
@@ -94,7 +95,7 @@ if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
     chmod 600 "$OPS/.env"; ok "GH_OAUTH_TOKEN refreshed from gh auth token"
   fi
 else warn "gh not logged in — GitHub MCP servers will fail until: gh auth login && scripts/install.sh"; fi
-set -a; [[ -f "$OPS/.env" ]] && source "$OPS/.env"; set +a
+set -a; [[ -f "$OPS/.env" ]] && source "$OPS/.env" 2>/dev/null; set +a
 if command -v claude >/dev/null 2>&1; then
   for s in github github-rw cloudflare vercel supabase; do claude mcp remove -s user "$s" >/dev/null 2>&1 || true; done
   claude mcp add -s user -t http github     https://api.githubcopilot.com/mcp/ -H "Authorization: Bearer ${GH_OAUTH_TOKEN:-UNSET}" -H "X-MCP-Readonly: true" >/dev/null 2>&1 && ok "mcp github (read-only header)" || warn "mcp github failed"
@@ -107,6 +108,7 @@ else
   warn "claude CLI not found; MCP servers not registered. Install, then re-run."
 fi
 
+set -e
 echo "== Codex (user scope)"
 mkdir -p "$HOME_DIR/.codex/agents" "$HOME_DIR/.agents/skills"
 cp "$SRC"/.codex/agents/*.toml "$HOME_DIR/.codex/agents/"

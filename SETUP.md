@@ -32,7 +32,7 @@ What it does, idempotently: checks `gh`/`python3`/`jq` and warns for any CLI not
 
 `scripts/install.sh --remove` takes it all back out. The clone can be deleted after install; keep it (or re-clone) to edit prompts and re-install.
 
-Any ✘ from `check-auth.sh` is a missing login or a kube context that is not read-only; fix it before running an agent.
+`setup.sh` never fails on a missing login, OAuth, MCP or CLI — it warns, skips that step, installs everything else, and ends with a WARNINGS count. Any ✘ from `check-auth.sh` is a missing login or a kube context that is not read-only; fix it, re-run `setup.sh`.
 
 ## 2a. Claude Code
 
