@@ -1,4 +1,7 @@
 .env
+selectors.env
+.runs/
+briefs/
 *.key.json
 kubeconfig*
 CLAUDE.local.md

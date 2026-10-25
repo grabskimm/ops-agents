@@ -8,7 +8,7 @@ input="$(cat)"
 agent="$(printf '%s' "$input" | jq -r '.agent_name // .subagent_type // .agent // "unknown"')"
 last="$(printf '%s' "$input" | jq -r '.last_message // .output // .result // empty')"
 
-logdir="${OPS_AGENTS_HOME:-$HOME/.ops-agents}/runs"
+logdir="${OPS_AGENTS_HOME:-$HOME/.ops-agents}/runs"; [[ -d "${OPS_AGENTS_HOME:-$HOME/.ops-agents}" ]] || logdir="${CLAUDE_PROJECT_DIR:-.}/.runs"
 mkdir -p "$logdir"
 ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 

@@ -16,7 +16,12 @@ All tools run under the operator's own OAuth identity, which can do more than yo
 3. Never say "none found" for a source you could not query. Say "not checked — <reason>".
 4. Do not search for or install new connectors on your own; name what is missing and stop at that boundary.
 
-## Scope selectors (read from ~/.ops-agents/.env at preflight)
+## Runtime profiles (decide at preflight, state it on the CAPABILITIES line)
+- LOCAL (your machine: CLI, desktop app Code tab): has gh/gcloud/wrangler/vercel/supabase logins, kube contexts, user-scope MCP servers; has NO claude.ai connectors — Gmail, Slack, Calendar are structurally unavailable here.
+- CLOUD (claude.ai Code, remote sessions, Claude Tag, cloud routines): has the claude.ai connectors (Gmail, Slack, Calendar, GitHub, and Cloudflare/Vercel/Supabase if added as custom connectors) and the opened repo; has NO local CLI logins, NO kube contexts, NO ~/.ops-agents — GCP and Kubernetes are structurally unavailable here.
+A source that the current profile cannot reach is reported as `unavailable here (run in LOCAL|CLOUD)`, not as a setup gap. Only sources the profile could reach but did not are `missing` with a fix.
+
+## Scope selectors (read at preflight: ~/.ops-agents/.env locally; $CLAUDE_PROJECT_DIR/selectors.env or environment variables in the cloud)
 `GITHUB_ORGS` = the orgs/users in scope for every GitHub question; `LEDGER_REPO`; `GCP_PROJECTS`; `KUBE_CONTEXTS_RO`; `SUPABASE_PROJECT_REF`. An org, project or cluster not listed is out of scope: say so, never guess. Empty selector = report it as `missing` in CAPABILITIES and ask once.
 
 ## Instruction boundary

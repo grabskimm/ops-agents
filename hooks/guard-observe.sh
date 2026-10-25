@@ -21,7 +21,7 @@ done
 
 # 0. kubectl: every call must name --context and it must be one of KUBE_CONTEXTS_RO (from ~/.ops-agents/.env).
 if [[ "$tool" == "Bash" && "$cmd" =~ (^|[[:space:]|;&])kubectl([[:space:]]|$) ]]; then
-  envf="${OPS_AGENTS_HOME:-$HOME/.ops-agents}/.env"; [[ -f "$envf" ]] && { set -a; source "$envf"; set +a; }
+  for envf in "${OPS_AGENTS_HOME:-$HOME/.ops-agents}/.env" "${CLAUDE_PROJECT_DIR:-.}/selectors.env"; do [[ -f "$envf" ]] && { set -a; source "$envf"; set +a; break; }; done
   if [[ "$cmd" =~ config[[:space:]]+(use-context|set-context|set-credentials|set-cluster) ]]; then
     echo "guard-observe: kubectl config changes are never allowed from an agent." >&2; exit 2; fi
   if [[ ! "$cmd" =~ config[[:space:]]+get-contexts ]]; then

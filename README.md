@@ -11,6 +11,7 @@ curl -fsSL https://raw.githubusercontent.com/grabskimm/ops-agents/main/bootstrap
 `scripts/setup.sh` installs the system into your user-level config (`~/.ops-agents`, `~/.claude`, `~/.codex`, `~/.agents`); agents then run from any directory. Nothing runs from, or commits back to, this repo — the only writes it ever receives are PRs from skills-librarian adding a skill.
 
 ```
+CLAUDE.md + selectors.env.example   what a CLOUD session reads when it opens this repo (docs/runtimes.md)
 bootstrap.sh           curl | bash entry point: fetch tarball → setup.sh → delete; flags pass through (`bash -s -- --install`)
 AGENTS.md              shared contract (tiers, ledger, output block) → ~/.ops-agents/AGENTS.md, imported by ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md
 agents.json            per-agent settings (model, tools, MCP servers) for both runtimes
@@ -29,6 +30,10 @@ scripts/render-brief.py + templates/brief.schema.md   the brief as a self-contai
 schedules/routines.md  the timer prompts the chief-of-staff handles (brief, sweep, stale check, PR nudge, retro); skills/routines creates them via the session's scheduling tool
 .env.example           selectors only (GITHUB_ORGS, LEDGER_REPO, GCP_PROJECTS, KUBE_CONTEXTS_RO, SUPABASE_PROJECT_REF) → ~/.ops-agents/.env
 ```
+
+## Two runtimes
+
+Local sessions (CLI, desktop Code tab) use the user-scope install and your CLI logins; cloud sessions (claude.ai Code, remote, Claude Tag, routines) open **this repo** and use claude.ai connectors. Each can reach sources the other cannot (comms is cloud-only; GCP/Kubernetes are local-only); the chief-of-staff labels every brief LOCAL or CLOUD. See `docs/runtimes.md`.
 
 ## Agents
 

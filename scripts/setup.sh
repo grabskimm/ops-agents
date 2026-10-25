@@ -80,8 +80,10 @@ cat <<EOF
 Selectors in $OPS/.env (re-run this script after editing):
   - GITHUB_ORGS: every GitHub org/user the agents may read — comma-separated, as many as needed (pre-filled from gh; review it)
   - LEDGER_REPO, GCP_PROJECTS, KUBE_CONTEXTS_RO, SUPABASE_PROJECT_REF
-Claude Code:
-  - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar (OAuth)
+Claude Code (CLOUD profile — see docs/runtimes.md):
+  - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar, GitHub; add custom connectors for Cloudflare, Vercel, Supabase (same MCP URLs)
+  - cloud sessions open this repo (or your fork); set GITHUB_ORGS etc. as cloud environment variables or commit selectors.env to the fork
+Claude Code (LOCAL profile):
   - routines: in a Claude app / Claude Code remote session say "set up my routines" (skill creates them); CLI-only → Routines page by hand from $OPS/schedules/routines.md
   - Slack: install Claude Tag, invite to #ops-agents
   - claude → /mcp → authenticate cloudflare, vercel, supabase (OAuth, once)
