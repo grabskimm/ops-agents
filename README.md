@@ -14,7 +14,7 @@ curl -fsSL https://raw.githubusercontent.com/grabskimm/ops-agents/main/bootstrap
 bootstrap.sh           curl | bash entry point: fetch tarball → setup.sh → delete; flags pass through (`bash -s -- --install`)
 AGENTS.md              shared contract (tiers, ledger, output block) → ~/.ops-agents/AGENTS.md, imported by ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md
 agents.json            per-agent settings (model, tools, MCP servers) for both runtimes
-prompts/<agent>.md     canonical prompt per agent — edit these
+prompts/<agent>.md     canonical prompt per agent — edit these; prompts/_template.md + scripts/new-agent.sh scaffold a new one
 scripts/build-agents.py  generates .claude/agents/*.md and .codex/agents/*.toml from the two above
 scripts/setup.sh       end to end: ledger repo + labels, install, auth checks, prints the manual steps
 scripts/install.sh     installs into ~/.ops-agents, ~/.claude, ~/.codex, ~/.agents (idempotent; --remove undoes it)

@@ -82,6 +82,8 @@ def main():
     CODEX_DIR.mkdir(parents=True, exist_ok=True)
     missing = []
     for name, spec in manifest["agents"].items():
+        if name.startswith("_"):
+            continue
         p = PROMPTS / f"{name}.md"
         if not p.exists():
             missing.append(str(p))
