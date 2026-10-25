@@ -29,3 +29,4 @@ Rules for the writer:
 - `priority` ∈ P0|P1|P2; `action` ∈ decide|approve|review|none. Blind spots go in `not_checked`, never in `items`.
 - `window` is explicit ISO with offset, start → end; the same string is passed to every specialist.
 - `track` lists only what is worth a ledger issue; the operator answers "track".
+- The chat reply is three lines (headline, `Brief: <path>`, `Open it? (yes)`); everything else lives here.

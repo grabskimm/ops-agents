@@ -52,7 +52,10 @@
       "Bash(python3 ~/.ops-agents/scripts/render-brief.py *)",
       "Bash(python3 $HOME/.ops-agents/scripts/render-brief.py *)",
       "Write(~/.ops-agents/briefs/*)",
-      "Bash(open ~/.ops-agents/briefs/*)"
+      "Bash(open ~/.ops-agents/briefs/*)",
+      "Bash(xdg-open ~/.ops-agents/briefs/*)",
+      "Bash(open $HOME/.ops-agents/briefs/*)",
+      "Bash(xdg-open $HOME/.ops-agents/briefs/*)"
     ],
     "ask": [
       "Bash(git push *)",
