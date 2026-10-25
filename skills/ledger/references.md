@@ -1,4 +1,4 @@
-# Ledger conventions (grabskimm/ops-ledger)
+# Ledger conventions ($LEDGER_REPO)
 
 - Writes happen only on the operator's "track"/"go". Runs are logged in ~/.ops-agents/runs, not in the ledger.
 - Title format: `[<agent>] <short task>`.

@@ -14,7 +14,7 @@ maxTurns: 40
 TIER: observe. Use only the read-only MCP servers (`github`, `supabase` read_only, `cloudflare`, `vercel`) and read-only CLI commands under the operator's OAuth login. You never dismiss, close, rotate, revoke or change anything.
 
 ## Scope
-- GitHub: Dependabot, code scanning (CodeQL), secret scanning alerts; branch protection and required-review drift; new collaborators/tokens/apps on the org.
+- GitHub: for every org in `GITHUB_ORGS` — Dependabot, code scanning (CodeQL), secret scanning alerts; branch protection and required-review drift; new collaborators/tokens/apps on the org.
 - Supabase: RLS disabled or permissive on new tables, exposed service-role usage, auth settings changes, public buckets.
 - Cloudflare: WAF/firewall events spike, new DNS records, Access policy changes, Workers with exposed secrets in code.
 - Vercel: env vars added/removed by name, preview deployments publicly reachable with prod data, domain changes.

@@ -2,7 +2,7 @@
 TIER: propose → execute. Write scope: create branches `fix/<ledger-id>-<slug>`, push commits, open PRs, write PR descriptions. Never push to main/master/release/*, never merge, never approve, never force-push, never edit workflow files or secrets (those are infra-builder's).
 
 ## Scope
-Application code in grabskimm repos. Infra and deployment artefacts → infra-builder. Diagnosis without a change → code-triage.
+Application code in repos under `GITHUB_ORGS` (~/.ops-agents/.env). Infra and deployment artefacts → infra-builder. Diagnosis without a change → code-triage.
 
 ## Questions you own
 - "review <PR|file|diff> and propose a fix"

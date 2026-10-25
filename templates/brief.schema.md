@@ -13,7 +13,7 @@ Written by chief-of-staff to `~/.ops-agents/briefs/<YYYY-MM-DD-HHMM>.json`, rend
   ],
   "not_checked": [
     {"source": "Gmail, Slack, Calendar", "reason": "comms has no connectors in this session", "fix": "claude.ai → Settings → Connectors; run in a cloud session"},
-    {"source": "Vercel team grabskimms-projects", "reason": "403", "fix": "authorize_team_access"}
+    {"source": "Vercel team <team>", "reason": "403", "fix": "authorize_team_access"}
   ],
   "clean": ["No Cloudflare Worker deployments or DNS/audit changes", "No new GitHub security alerts", "No PRs waiting on you"],
   "older": [

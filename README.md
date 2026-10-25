@@ -27,7 +27,7 @@ hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh
 evals/                 known-answer cases per agent
 scripts/render-brief.py + templates/brief.schema.md   the brief as a self-contained HTML page (~/.ops-agents/briefs/), published as an artifact where the session has one
 schedules/routines.md  the timer prompts the chief-of-staff handles (brief, sweep, stale check, PR nudge, retro); skills/routines creates them via the session's scheduling tool
-.env.example           selectors only (project ref, GCP projects, read-only kube contexts) → ~/.ops-agents/.env
+.env.example           selectors only (GITHUB_ORGS, LEDGER_REPO, GCP_PROJECTS, KUBE_CONTEXTS_RO, SUPABASE_PROJECT_REF) → ~/.ops-agents/.env
 ```
 
 ## Agents
@@ -71,4 +71,4 @@ claude -p "morning brief" --agent chief-of-staff --permission-mode default --per
 
 ## Ledger
 
-`grabskimm/ops-ledger` (GitHub Issues), created by `scripts/setup.sh --ledger` with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*`. Agents only read it on their own; a write needs your "track"/"go". `skills/ledger/SKILL.md` has the commands.
+`$LEDGER_REPO` (GitHub Issues; default `<first GITHUB_ORGS entry>/ops-ledger`), created by `scripts/setup.sh --ledger` with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*`. Agents only read it on their own; a write needs your "track"/"go". `skills/ledger/SKILL.md` has the commands.

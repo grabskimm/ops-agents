@@ -7,7 +7,9 @@
 set -uo pipefail
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
 OPS="${OPS_AGENTS_HOME:-$HOME/.ops-agents}"
-ORG="${ORG:-grabskimm}"; LEDGER="${LEDGER:-$ORG/ops-ledger}"
+# Org and ledger come from ~/.ops-agents/.env (GITHUB_ORGS, LEDGER_REPO); env vars ORG / LEDGER override; last resort = the gh login.
+[[ -f "$OPS/.env" ]] && { set -a; . "$OPS/.env" 2>/dev/null; set +a; }
+ORG="${ORG:-${GITHUB_ORGS%%,*}}"; LEDGER="${LEDGER:-${LEDGER_REPO:-}}"
 DO_LEDGER=0; DO_INSTALL=0; DO_CHECK=0
 [[ $# -eq 0 ]] && set -- --all
 for a in "$@"; do case "$a" in
@@ -28,7 +30,7 @@ echo "== prerequisites"
 need python3 "python 3.11+"; need jq "https://jqlang.github.io/jq"
 GH_OK=0
 if ! command -v gh >/dev/null 2>&1; then warn "gh not installed (https://cli.github.com) — ledger creation and GitHub MCP registration skipped"
-elif who="$(gh_login)"; then GH_OK=1; ok "gh authenticated as $who"
+elif who="$(gh_login)"; then GH_OK=1; ok "gh authenticated as $who"; ORG="${ORG:-$who}"; LEDGER="${LEDGER:-$ORG/ops-ledger}"
 else warn "gh cannot reach github.com as you (${GH_ERR:-no detail}) — try: unset GH_TOKEN; gh auth login -h github.com. Ledger step and GitHub MCP registration skipped"; fi
 [[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]] && warn "GH_TOKEN/GITHUB_TOKEN is set in this shell; gh uses it instead of your OAuth login"
 for c in claude codex gcloud wrangler vercel supabase kubectl; do command -v "$c" >/dev/null 2>&1 && ok "$c found" || warn "$c not installed — agents that need it will report STATUS: blocked"; done
@@ -41,6 +43,10 @@ mkdir -p "$OPS"
 if [[ ! -f "$OPS/.env" ]]; then cp "$SRC/.env.example" "$OPS/.env"; warn "created $OPS/.env from template — set SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO, then re-run"; fi
 
 if [[ $DO_LEDGER -eq 1 && $GH_OK -eq 0 ]]; then warn "ledger step skipped: gh not logged in"; DO_LEDGER=0; fi
+[[ -z "${GITHUB_ORGS:-}" ]] && warn "GITHUB_ORGS not set in $OPS/.env — GitHub agents will only know the ledger org ($ORG); add every org/user they should read"
+if [[ $GH_OK -eq 1 ]]; then
+  grep -q '^LEDGER_REPO=.\+' "$OPS/.env" 2>/dev/null || { sed -i.bak "s#^LEDGER_REPO=.*#LEDGER_REPO=$LEDGER#" "$OPS/.env" 2>/dev/null && rm -f "$OPS/.env.bak"; grep -q '^LEDGER_REPO=' "$OPS/.env" || echo "LEDGER_REPO=$LEDGER" >> "$OPS/.env"; ok "LEDGER_REPO=$LEDGER written to $OPS/.env"; }
+fi
 if [[ $DO_LEDGER -eq 1 ]]; then
   echo "== ledger: $LEDGER"
   if ! gh repo view "$LEDGER" >/dev/null 2>&1; then

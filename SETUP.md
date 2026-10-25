@@ -19,7 +19,7 @@ Every system is reached under your own identity. That means the identity can wri
 Then set the selectors (no secrets):
 ```
 mkdir -p ~/.ops-agents && cp .env.example ~/.ops-agents/.env
-# SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO
+# GITHUB_ORGS (every org/user the agents may read), LEDGER_REPO, SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO
 ```
 
 ## 1. Run the setup script
