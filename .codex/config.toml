@@ -1,0 +1,30 @@
+# Codex project config for ops-agents.
+# Subagents inherit sandbox_mode, approval_policy and mcp_servers from here; agent files cannot override them.
+
+approval_policy = "on-request"      # execute-tier actions pause for approval
+sandbox_mode    = "workspace-write" # never "danger-full-access" in this repo
+
+[agents]
+max_concurrent_threads_per_session = 4
+default_subagent_model = "gpt-6-luna"
+default_subagent_reasoning_effort = "high"
+
+# --- GitHub: two servers, two tokens. The token is the tier. ---
+[mcp_servers.github_ro]
+url = "https://api.githubcopilot.com/mcp/"
+http_headers = { Authorization = "Bearer ${GH_TOKEN_READ}" }
+
+[mcp_servers.github_rw]
+url = "https://api.githubcopilot.com/mcp/"
+http_headers = { Authorization = "Bearer ${GH_TOKEN_RW}" }
+
+[mcp_servers.cloudflare]
+url = "https://mcp.cloudflare.com/mcp"
+
+[mcp_servers.vercel]
+url = "https://mcp.vercel.com"
+
+[mcp_servers.supabase]
+command = "npx"
+args = ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref=${SUPABASE_PROJECT_REF}"]
+env = { SUPABASE_ACCESS_TOKEN = "${SUPABASE_PAT_RO}" }

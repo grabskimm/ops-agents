@@ -1,0 +1,114 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Skill",
+      "Bash(git status*)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git fetch *)",
+      "Bash(git checkout -b *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr view *)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh issue view *)",
+      "Bash(gh api -X GET *)",
+      "Bash(gcloud * list *)",
+      "Bash(gcloud * describe *)",
+      "Bash(gcloud logging read *)",
+      "Bash(kubectl get *)",
+      "Bash(kubectl describe *)",
+      "Bash(kubectl logs *)",
+      "Bash(terraform init *)",
+      "Bash(terraform validate*)",
+      "Bash(terraform plan *)",
+      "Bash(helm template *)",
+      "Bash(helm lint *)",
+      "Bash(docker build *)",
+      "Bash(python3 scripts/*)",
+      "mcp__github__*",
+      "mcp__cloudflare__*",
+      "mcp__supabase__*",
+      "mcp__vercel__*"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create *)",
+      "Bash(gh issue create *)",
+      "Bash(gh issue comment *)",
+      "Bash(gh issue edit *)",
+      "mcp__github-rw__*",
+      "mcp__gmail__create_draft",
+      "mcp__gmail__update_draft"
+    ],
+    "deny": [
+      "Bash(git push * main*)",
+      "Bash(git push * master*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh pr review --approve*)",
+      "Bash(gh api -X POST *)",
+      "Bash(gh api -X PUT *)",
+      "Bash(gh api -X PATCH *)",
+      "Bash(gh api -X DELETE *)",
+      "Bash(terraform apply *)",
+      "Bash(terraform destroy *)",
+      "Bash(terraform import *)",
+      "Bash(kubectl apply *)",
+      "Bash(kubectl delete *)",
+      "Bash(kubectl rollout *)",
+      "Bash(kubectl scale *)",
+      "Bash(kubectl edit *)",
+      "Bash(kubectl patch *)",
+      "Bash(helm install *)",
+      "Bash(helm upgrade *)",
+      "Bash(helm uninstall *)",
+      "Bash(wrangler deploy *)",
+      "Bash(wrangler publish *)",
+      "Bash(vercel deploy *)",
+      "Bash(vercel --prod*)",
+      "Bash(vercel env *)",
+      "Bash(supabase db push *)",
+      "Bash(supabase functions deploy *)",
+      "Bash(gcloud * create *)",
+      "Bash(gcloud * delete *)",
+      "Bash(gcloud * update *)",
+      "Bash(gcloud * deploy *)",
+      "Bash(gcloud iam *)",
+      "Bash(gcloud run deploy *)",
+      "mcp__gmail__send_message",
+      "mcp__gmail__reply",
+      "mcp__gmail__forward",
+      "mcp__gmail__trash_message",
+      "mcp__gmail__trash_thread",
+      "mcp__gmail__mark_message_spam",
+      "mcp__gmail__mark_thread_spam"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__.*",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/hooks/guard-observe.sh" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/hooks/ledger-touch.sh" }
+        ]
+      }
+    ]
+  }
+}

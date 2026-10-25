@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GH_TOKEN_READ}" }
+    },
+    "github-rw": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GH_TOKEN_RW}" }
+    },
+    "cloudflare": {
+      "type": "http",
+      "url": "https://mcp.cloudflare.com/mcp"
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "supabase": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref=${SUPABASE_PROJECT_REF}"],
+      "env": { "SUPABASE_ACCESS_TOKEN": "${SUPABASE_PAT_RO}" }
+    }
+  }
+}

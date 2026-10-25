@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "shell",
+        "hooks": [
+          { "type": "command", "command": "hooks/guard-observe.sh" }
+        ]
+      }
+    ]
+  }
+}
