@@ -19,12 +19,18 @@ WARNINGS=0
 ok()   { printf '  \033[32m✔\033[0m %s\n' "$*"; }
 warn() { printf '  \033[33m!\033[0m %s\n' "$*"; WARNINGS=$((WARNINGS+1)); }
 need() { command -v "$1" >/dev/null 2>&1 || { echo "missing hard requirement: $1 — $2"; exit 1; }; }
+gh_login() { # prints the login on success; exit 1 with gh's reason on failure
+  local who; who="$(gh api user --jq .login 2>"${TMPDIR:-/tmp}/gh_err.$$")" && { printf '%s' "$who"; rm -f "${TMPDIR:-/tmp}/gh_err.$$"; return 0; }
+  GH_ERR="$(head -c 300 "${TMPDIR:-/tmp}/gh_err.$$" 2>/dev/null | tr '\n' ' ')"; rm -f "${TMPDIR:-/tmp}/gh_err.$$"; return 1
+}
 
 echo "== prerequisites"
 need python3 "python 3.11+"; need jq "https://jqlang.github.io/jq"
 GH_OK=0
-if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then GH_OK=1; ok "gh authenticated as $(gh api user --jq .login 2>/dev/null || echo '?')"
-else warn "gh not installed or not logged in (gh auth login) — ledger creation and GitHub MCP registration skipped"; fi
+if ! command -v gh >/dev/null 2>&1; then warn "gh not installed (https://cli.github.com) — ledger creation and GitHub MCP registration skipped"
+elif who="$(gh_login)"; then GH_OK=1; ok "gh authenticated as $who"
+else warn "gh cannot reach github.com as you (${GH_ERR:-no detail}) — try: unset GH_TOKEN; gh auth login -h github.com. Ledger step and GitHub MCP registration skipped"; fi
+[[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]] && warn "GH_TOKEN/GITHUB_TOKEN is set in this shell; gh uses it instead of your OAuth login"
 for c in claude codex gcloud wrangler vercel supabase kubectl; do command -v "$c" >/dev/null 2>&1 && ok "$c found" || warn "$c not installed — agents that need it will report STATUS: blocked"; done
 echo "== OAuth logins (warn only; log in with each CLI, no tokens are stored)"
 command -v gcloud >/dev/null && { [[ -n "$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null)" ]] && ok "gcloud" || warn "gcloud auth login && gcloud auth application-default login"; }

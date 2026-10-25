@@ -12,8 +12,10 @@ have() { command -v "$1" >/dev/null 2>&1; }
 
 echo "GitHub (gh)"
 if have gh; then
-  gh auth status >/dev/null 2>&1 && ok "logged in as $(gh api user --jq .login 2>/dev/null)" || bad "not logged in → gh auth login"
-  gh auth status 2>&1 | grep -q 'Token scopes' && { scopes="$(gh auth status 2>&1 | grep -o "Token scopes:.*")"; warn "$scopes — the identity can write; tier is enforced by X-MCP-Readonly, settings.json and the guard hook"; }
+  if who="$(gh api user --jq .login 2>/tmp/gh_err.$$)"; then ok "logged in as $who"
+  else bad "cannot reach github.com as you ($(head -c 200 /tmp/gh_err.$$ | tr '\n' ' ')) → unset GH_TOKEN; gh auth login -h github.com"; fi; rm -f /tmp/gh_err.$$
+  [[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]] && warn "GH_TOKEN/GITHUB_TOKEN set in this shell — gh is using it, not your OAuth login"
+  gh auth status -h github.com 2>&1 | grep -q 'Token scopes' && warn "$(gh auth status -h github.com 2>&1 | grep -o 'Token scopes:.*' | head -1) — the identity can write; tier is enforced by X-MCP-Readonly, settings.json and the guard hook"
 else bad "gh not installed"; fi
 
 echo "Google Cloud (gcloud)"

@@ -87,14 +87,14 @@ jq --slurpfile m "$SRC/.claude/settings.json" --arg ops "$OPS" '
 ok "settings.json: permissions + hooks merged (existing entries kept)"
 set +e   # from here on: gh/MCP/OAuth steps warn, never abort
 # GH_OAUTH_TOKEN comes from gh's OAuth login; written into ~/.ops-agents/.env for the MCP headers (re-run install after a new gh auth login).
-if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
-  tok="$(gh auth token 2>/dev/null || true)"
+if command -v gh >/dev/null 2>&1 && gh api user --jq .login >/dev/null 2>&1; then
+  tok="$(gh auth token -h github.com 2>/dev/null || gh auth token 2>/dev/null || true)"
   if [[ -n "$tok" ]]; then
     touch "$OPS/.env"
     if grep -q '^GH_OAUTH_TOKEN=' "$OPS/.env"; then sed -i.bak "s#^GH_OAUTH_TOKEN=.*#GH_OAUTH_TOKEN=$tok#" "$OPS/.env"; rm -f "$OPS/.env.bak"; else echo "GH_OAUTH_TOKEN=$tok" >> "$OPS/.env"; fi
     chmod 600 "$OPS/.env"; ok "GH_OAUTH_TOKEN refreshed from gh auth token"
   fi
-else warn "gh not logged in — GitHub MCP servers will fail until: gh auth login && scripts/install.sh"; fi
+else warn "gh cannot reach github.com as you — GitHub MCP servers will fail until: gh auth login -h github.com && scripts/install.sh"; fi
 set -a; [[ -f "$OPS/.env" ]] && source "$OPS/.env" 2>/dev/null; set +a
 if command -v claude >/dev/null 2>&1; then
   for s in github github-rw cloudflare vercel supabase; do claude mcp remove -s user "$s" >/dev/null 2>&1 || true; done
