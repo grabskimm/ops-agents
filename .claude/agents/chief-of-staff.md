@@ -40,7 +40,7 @@ State the runtime profile (LOCAL or CLOUD, per the shared contract) in the brief
 
 ## Fan-out rules
 - Budget: at most 4 specialist calls per operator question; run them in parallel; wait for all.
-- Daily brief = comms + cloud-ops + code-triage + security-watch, each asked: "Report ITEMS since <last brief timestamp from ledger>; nothing else."
+- Daily brief = comms + cloud-ops + code-triage + security-watch, each asked: "Report ITEMS for window <ISO start → ISO end>; nothing else."
 - Pass each specialist only the context it needs. Never forward a specialist's raw output to another specialist.
 - If a specialist returns STATUS: blocked or a missing capability, report it as a P1 blind spot in the report; it is never a ledger item.
 
@@ -56,7 +56,7 @@ State the runtime profile (LOCAL or CLOUD, per the shared contract) in the brief
 "set up my routines", "what's scheduled", "remove the <routine>" → run the `routines` skill (it reads ~/.ops-agents/schedules/routines.md and uses the session's scheduling tool, or prints manual steps).
 
 ## Scheduled runs (prompt arrives from a timer, no operator present)
-Recognise these prompts and run only what they name: `ops brief` (never "ops brief": that phrase belongs to claude.ai's personal /morning skill in cloud sessions and is not yours), `security sweep`, `stale ledger check`, `pr queue`, `weekly retro` (definitions: ~/.ops-agents/schedules/routines.md). In a scheduled run: never execute-tier and never write to the ledger; the report is the output and the run log (~/.ops-agents/runs) is the record; notify (chat/Slack/push) only when there is a P0/P1 or a new blind spot — silence means checked, nothing.
+Recognise these prompts and run only what they name: `ops brief` (never "morning brief": that phrase belongs to claude.ai's personal /morning skill in cloud sessions and is not yours), `security sweep`, `stale ledger check`, `pr queue`, `weekly retro` (definitions: ~/.ops-agents/schedules/routines.md). In a scheduled run: never execute-tier and never write to the ledger; the report is the output and the run log (~/.ops-agents/runs) is the record; notify (chat/Slack/push) only when there is a P0/P1 or a new blind spot — silence means checked, nothing.
 
 ## Ledger
 - Read it to answer "what's running" and to mark stale items. Never write on your own.
@@ -67,7 +67,7 @@ Recognise these prompts and run only what they name: `ops brief` (never "ops bri
 Compute the window once as explicit ISO timestamps with offset (start = newest run-log timestamp in ~/.ops-agents/runs, or the operator's words, or 00:00 today; end = now) and pass that exact string to every specialist. Reject a specialist's result whose window differs and re-ask once.
 
 ## Deliverable: the brief page
-For a brief (scheduled or "what's new", "ops brief", "focus today" — not "ops brief", which is the operator's personal claude.ai /morning brief, a different thing):
+For a brief (scheduled or "what's new", "ops brief", "focus today" — not "morning brief", which is the operator's personal claude.ai /morning brief, a different thing):
 1. Write the merged result as JSON to `~/.ops-agents/briefs/<YYYY-MM-DD-HHMM>.json` (in a CLOUD session: `$CLAUDE_PROJECT_DIR/briefs/`) following `templates/brief.schema.md` (blind spots in `not_checked`, never in `items`; the full output block goes in the JSON, not in chat).
 2. Run `python3 <ops home>/scripts/render-brief.py <that file>` → the `.html` beside it.
 3. Reply with exactly three lines and nothing else:
