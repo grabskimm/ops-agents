@@ -24,13 +24,20 @@ mkdir -p ~/.ops-agents && cp .env.example ~/.ops-agents/.env
 
 ## 1. Run the setup script
 
+No clone needed:
 ```
-git clone https://github.com/grabskimm/ops-agents && cd ops-agents
-scripts/setup.sh            # all of: --ledger --install --check
+curl -fsSL https://raw.githubusercontent.com/grabskimm/ops-agents/main/bootstrap.sh | bash              # all of: --ledger --install --check
+curl -fsSL https://raw.githubusercontent.com/grabskimm/ops-agents/main/bootstrap.sh | bash -s -- --install   # one step only
+```
+It fetches a tarball into a temp dir, runs `scripts/setup.sh`, and deletes the temp dir. `OPS_AGENTS_REF=<tag|branch>` pins a version; `OPS_AGENTS_REPO=<owner/repo>` points at a fork. For a private repo be logged in with `gh` first (the bootstrap uses it to download). Read the script before piping it to bash; it is 30 lines.
+
+With a clone, equivalently:
+```
+git clone https://github.com/grabskimm/ops-agents && cd ops-agents && scripts/setup.sh
 ```
 What it does, idempotently: checks `gh`/`python3`/`jq` and warns for any CLI not installed or not logged in; creates `grabskimm/ops-ledger` (private) with every label and the "daily brief log" issue; runs `scripts/install.sh`, which regenerates the agent files and installs them into `~/.ops-agents` (contract, prompts, hooks, skills, runs log), `~/.claude` (agents, skills symlinks, settings.json merge, CLAUDE.md import block, MCP servers at user scope with `gh auth token` for GitHub), `~/.codex` (agents, config.toml block, global AGENTS.md block, hooks.json) and `~/.agents/skills`; then runs `scripts/check-auth.sh`, which warns for any CLI not logged in, proves each `KUBE_CONTEXTS_RO` context cannot delete, and tests the guard hook.
 
-`scripts/install.sh --remove` takes it all back out. The clone can be deleted after install; keep it (or re-clone) to edit prompts and re-install.
+Removal: `OPS_AGENTS_KEEP=1 curl … | bash -s -- --install` prints the kept path, then `<path>/scripts/install.sh --remove`; or from a clone, `scripts/install.sh --remove`. Updating = re-run the bootstrap line.
 
 `setup.sh` never fails on a missing login, OAuth, MCP or CLI — it warns, skips that step, installs everything else, and ends with a WARNINGS count. Any ✘ from `check-auth.sh` is a missing login or a kube context that is not read-only; fix it, re-run `setup.sh`.
 

@@ -2,9 +2,16 @@
 
 Scaffold for an eight-agent daily working system: one orchestrator, four read-only watchers, three PR-only actors, one task ledger. Runs on Claude Code and on ChatGPT/Codex from the same prompts.
 
-**This repo is a template, not a workspace.** `scripts/setup.sh` installs the system into your user-level config (`~/.ops-agents`, `~/.claude`, `~/.codex`, `~/.agents`); agents then run from any directory. Nothing runs from, or commits back to, this repo — the only writes it ever receives are PRs from skills-librarian adding a skill.
+**This repo is a template, not a workspace.** One line installs it without keeping a clone:
 
 ```
+curl -fsSL https://raw.githubusercontent.com/grabskimm/ops-agents/main/bootstrap.sh | bash
+```
+
+`scripts/setup.sh` installs the system into your user-level config (`~/.ops-agents`, `~/.claude`, `~/.codex`, `~/.agents`); agents then run from any directory. Nothing runs from, or commits back to, this repo — the only writes it ever receives are PRs from skills-librarian adding a skill.
+
+```
+bootstrap.sh           curl | bash entry point: fetch tarball → setup.sh → delete; flags pass through (`bash -s -- --install`)
 AGENTS.md              shared contract (tiers, ledger, output block) → ~/.ops-agents/AGENTS.md, imported by ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md
 agents.json            per-agent settings (model, tools, MCP servers) for both runtimes
 prompts/<agent>.md     canonical prompt per agent — edit these
@@ -54,8 +61,8 @@ claude -p "morning brief" --agent chief-of-staff --permission-mode default --per
 
 ## Edit a prompt
 
-1. Change `prompts/<agent>.md` (or a setting in `agents.json`) in your clone of this scaffold.
-2. `scripts/install.sh` — regenerates and re-installs into user scope.
+1. Change `prompts/<agent>.md` (or a setting in `agents.json`) in a clone or fork of this scaffold.
+2. `scripts/install.sh` — regenerates and re-installs into user scope (or push and re-run the bootstrap line, with `OPS_AGENTS_REPO=<fork>`).
 3. Re-run that agent's `evals/` cases. Push to this repo only if the scaffold itself should change.
 
 ## Ledger
