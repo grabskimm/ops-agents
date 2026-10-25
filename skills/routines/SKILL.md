@@ -1,6 +1,6 @@
 ---
 name: routines
-description: Create, list or remove the ops-agents scheduled routines (morning brief, security sweep, stale ledger check, PR queue, weekly retro) from ~/.ops-agents/schedules/routines.md. Use when the operator says "set up my routines", "schedule the brief", "/routines", or asks what is scheduled.
+description: Create, list or remove the ops-agents scheduled routines (ops brief, security sweep, stale ledger check, PR queue, weekly retro) from ~/.ops-agents/schedules/routines.md. Use when the operator says "set up my routines", "schedule the brief", "/routines", or asks what is scheduled.
 allowed-tools: Read, Bash(date *)
 ---
 

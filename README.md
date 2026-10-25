@@ -61,7 +61,7 @@ Local sessions (CLI, desktop Code tab) use the user-scope install and your CLI l
 ```
 claude --agent chief-of-staff      # CLI
 /cos <question>                    # any surface: CLI, desktop app Code tab, remote session
-codex       # then: "morning brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules"
+codex       # then: "ops brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules"
 ```
 Headless daily brief:
 ```

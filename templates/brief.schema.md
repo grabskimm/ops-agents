@@ -4,7 +4,7 @@ Written by chief-of-staff to `~/.ops-agents/briefs/<YYYY-MM-DD-HHMM>.json`, rend
 
 ```json
 {
-  "title": "Morning brief",
+  "title": "Ops brief",
   "generated_at": "2026-10-25T14:30-07:00",
   "window": "2026-10-25T00:00-07:00 → 2026-10-25T14:30-07:00",
   "headline": "Nothing urgent, but half the sources could not be checked. One new CI failure in lyfegame/shortcut.",
