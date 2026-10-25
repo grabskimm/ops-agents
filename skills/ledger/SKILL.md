@@ -8,6 +8,8 @@ allowed-tools: Bash(gh issue *), Bash(gh api -X GET *), mcp__github__*, mcp__git
 
 Tier note: creating or commenting on a ledger issue is the one write every agent may perform, including observe-tier agents. Nothing else in `ops-ledger` is in scope.
 
+Conventions: see `references.md` next to this file.
+
 ## 1. Find an existing issue
 ```
 gh issue list -R grabskimm/ops-ledger --state open --label "agent/<name>" --search "<key term>" --json number,title,url,labels

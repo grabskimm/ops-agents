@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
-# End-to-end setup for ops-agents. Idempotent: re-run any time.
-# Usage: scripts/setup.sh [--claude] [--codex] [--ledger] [--all]   (default: --all)
+# End-to-end setup. This repo is a scaffold: everything is installed into the operator's user-level
+# config (~/.ops-agents, ~/.claude, ~/.codex, ~/.agents) and nothing is committed back here.
+# Usage: scripts/setup.sh [--ledger] [--install] [--check] [--all]   (default: --all). Idempotent.
 # Needs: gh (authenticated as the operator), python3, jq. Optional: claude, codex, gcloud, kubectl, npx.
 set -euo pipefail
-cd "$(dirname "$0")/.."
-
-ORG="${ORG:-grabskimm}"
-LEDGER="${LEDGER:-$ORG/ops-ledger}"
-DO_CLAUDE=0; DO_CODEX=0; DO_LEDGER=0
+SRC="$(cd "$(dirname "$0")/.." && pwd)"
+OPS="${OPS_AGENTS_HOME:-$HOME/.ops-agents}"
+ORG="${ORG:-grabskimm}"; LEDGER="${LEDGER:-$ORG/ops-ledger}"
+DO_LEDGER=0; DO_INSTALL=0; DO_CHECK=0
 [[ $# -eq 0 ]] && set -- --all
 for a in "$@"; do case "$a" in
-  --all) DO_CLAUDE=1; DO_CODEX=1; DO_LEDGER=1;;
-  --claude) DO_CLAUDE=1;; --codex) DO_CODEX=1;; --ledger) DO_LEDGER=1;;
+  --all) DO_LEDGER=1; DO_INSTALL=1; DO_CHECK=1;;
+  --ledger) DO_LEDGER=1;; --install) DO_INSTALL=1;; --check) DO_CHECK=1;;
   *) echo "unknown flag $a"; exit 1;;
 esac; done
-
 ok()   { printf '  \033[32m✔\033[0m %s\n' "$*"; }
 warn() { printf '  \033[33m!\033[0m %s\n' "$*"; }
 need() { command -v "$1" >/dev/null 2>&1 || { echo "missing: $1 — $2"; exit 1; }; }
@@ -23,15 +22,15 @@ echo "== prerequisites"
 need gh "https://cli.github.com"; need python3 "python 3.11+"; need jq "https://jqlang.github.io/jq"
 gh auth status >/dev/null 2>&1 || { echo "run: gh auth login"; exit 1; }
 ok "gh authenticated as $(gh api user --jq .login)"
-for c in claude codex gcloud kubectl npx; do command -v "$c" >/dev/null 2>&1 && ok "$c found" || warn "$c not installed (optional)"; done
-
-echo "== environment"
-if [[ -f .env ]]; then set -a; source .env; set +a; ok ".env loaded"; else warn ".env missing — copy .env.example and fill tokens (connectors will fail until then)"; fi
-
-echo "== generated agent files"
-python3 scripts/build-agents.py >/dev/null && ok ".claude/agents and .codex/agents regenerated"
-chmod +x hooks/*.sh scripts/*.sh scripts/*.py
-mkdir -p .agents; ln -sfn ../skills .claude/skills; ln -sfn ../skills .agents/skills; ok "skills symlinked for both runtimes"
+for c in claude codex gcloud wrangler vercel supabase kubectl; do command -v "$c" >/dev/null 2>&1 && ok "$c found" || warn "$c not installed — agents that need it will report STATUS: blocked"; done
+echo "== OAuth logins (warn only; log in with each CLI, no tokens are stored)"
+gh auth status >/dev/null 2>&1 && ok "gh" || warn "gh auth login"
+command -v gcloud >/dev/null && { [[ -n "$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null)" ]] && ok "gcloud" || warn "gcloud auth login && gcloud auth application-default login"; }
+command -v wrangler >/dev/null && { wrangler whoami >/dev/null 2>&1 && ok "wrangler" || warn "wrangler login"; }
+command -v vercel >/dev/null && { vercel whoami >/dev/null 2>&1 && ok "vercel" || warn "vercel login"; }
+command -v supabase >/dev/null && { supabase projects list >/dev/null 2>&1 && ok "supabase" || warn "supabase login"; }
+mkdir -p "$OPS"
+if [[ ! -f "$OPS/.env" ]]; then cp "$SRC/.env.example" "$OPS/.env"; warn "created $OPS/.env from template — set SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO, then re-run"; fi
 
 if [[ $DO_LEDGER -eq 1 ]]; then
   echo "== ledger: $LEDGER"
@@ -52,28 +51,30 @@ if [[ $DO_LEDGER -eq 1 ]]; then
   [[ "$n" != "1" ]] && warn "daily brief log is issue #$n, not #1 — update prompts/chief-of-staff.md and skills/ledger/SKILL.md"
 fi
 
-if [[ $DO_CLAUDE -eq 1 ]]; then
-  echo "== Claude Code"
-  python3 -c "import json;json.load(open('.claude/settings.json'));json.load(open('.mcp.json'))" && ok "settings.json / .mcp.json parse"
-  if command -v claude >/dev/null 2>&1; then
-    claude mcp list 2>/dev/null | grep -q . && ok "claude mcp list runs (project .mcp.json is picked up when you start claude in this dir; approve the servers on first run)" || warn "claude mcp list returned nothing — start 'claude' here once and approve the project MCP servers"
-    echo "  next: claude --agent chief-of-staff   (in this directory)"
-  else warn "claude CLI not found: npm install -g @anthropic-ai/claude-code"; fi
-  echo "  connectors (Gmail, Slack, Google Calendar) are attached in claude.ai Settings → Connectors; they appear as mcp__gmail__*, mcp__slack__*, mcp__google-calendar__* in cloud sessions"
-  echo "  daily brief: create a routine in Claude Code (cloud) — weekdays 10:00 local, prompt 'morning brief', agent chief-of-staff"
+if [[ $DO_INSTALL -eq 1 ]]; then
+  echo "== install into user scope"
+  "$SRC/scripts/install.sh"
 fi
 
-if [[ $DO_CODEX -eq 1 ]]; then
-  echo "== Codex"
-  python3 -c "import tomllib,glob;[tomllib.load(open(f,'rb')) for f in glob.glob('.codex/**/*.toml',recursive=True)]" && ok ".codex/*.toml parse"
-  if command -v codex >/dev/null 2>&1; then
-    ok "codex CLI found; .codex/config.toml and .codex/agents are read from this directory"
-    echo "  next: codex   (in this directory) → 'morning brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules'"
-  else warn "codex CLI not found: npm install -g @openai/codex"; fi
-  echo "  connectors (Gmail, Slack, Google Calendar) are plugins from github.com/openai/plugins: codex plugin install gmail|slack|google-calendar"
-  echo "  daily brief: ChatGPT Work scheduled task, weekdays 10:00 local, prompt 'morning brief', in a thread with this repo open"
+if [[ $DO_CHECK -eq 1 ]]; then
+  echo "== auth + tier guard"
+  OPS_AGENTS_HOME="$OPS" "$SRC/scripts/check-auth.sh" || warn "auth check reported problems (see above)"
 fi
 
-echo "== token tiers"
-scripts/check-tokens.sh || warn "token check reported problems (see above)"
-echo "done."
+cat <<EOF
+== remaining manual steps
+Claude Code:
+  - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar (OAuth)
+  - Claude Code → Routines: weekdays 10:00 local, prompt "morning brief", agent chief-of-staff
+  - Slack: install Claude Tag, invite to #ops-agents
+  - claude → /mcp → authenticate cloudflare, vercel, supabase (OAuth, once)
+  - run:  claude --agent chief-of-staff     (from any directory)
+Codex:
+  - codex plugin install gmail slack google-calendar
+  - add  set -a; . $OPS/.env; set +a  to your shell profile (Codex reads \${GH_OAUTH_TOKEN}, \${SUPABASE_PROJECT_REF} from env)
+  - codex mcp login cloudflare && codex mcp login vercel && codex mcp login supabase
+  - ChatGPT Work thread: scheduled task weekdays 10:00 local, "morning brief"
+  - Slack / GitHub: Codex Slack integration, Codex GitHub app
+  - run:  codex     (from any directory)
+done.
+EOF

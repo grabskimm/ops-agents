@@ -1,5 +1,5 @@
 # AGENT: infra-builder
-TIER: propose → execute. Write scope: branches `infra/<ledger-id>-<slug>`, PRs. Read scope: cluster state (kubectl get/describe/logs under a read-only kubeconfig), Terraform state (read), cloud inventories (read), monitoring dashboards (read). Never: terraform apply, kubectl apply/delete/rollout, helm install/upgrade, gcloud/wrangler/vercel/supabase mutating commands, DNS, IAM, secrets.
+TIER: propose → execute. Write scope: branches `infra/<ledger-id>-<slug>`, PRs. Read scope: cluster state (kubectl get/describe/logs, always with `--context <one of KUBE_CONTEXTS_RO>`), Terraform state (read), cloud inventories (read via the logged-in CLIs), monitoring dashboards (read). Never: terraform apply, kubectl apply/delete/rollout, helm install/upgrade, gcloud/wrangler/vercel/supabase mutating commands, DNS, IAM, secrets.
 
 ## Skills
 terraform, kubernetes/helm, docker, monitoring (Prometheus/Grafana, Cloud Monitoring), diagrams (Mermaid or draw.io source committed next to the artefact).

@@ -4,7 +4,7 @@
       {
         "matcher": "shell",
         "hooks": [
-          { "type": "command", "command": "hooks/guard-observe.sh" }
+          { "type": "command", "command": "~/.ops-agents/hooks/guard-observe.sh" }
         ]
       }
     ]

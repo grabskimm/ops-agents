@@ -36,7 +36,20 @@
       "mcp__github__*",
       "mcp__cloudflare__*",
       "mcp__supabase__*",
-      "mcp__vercel__*"
+      "mcp__vercel__*",
+      "Bash(wrangler whoami*)",
+      "Bash(wrangler deployments list *)",
+      "Bash(wrangler tail *)",
+      "Bash(wrangler kv:key list *)",
+      "Bash(vercel ls *)",
+      "Bash(vercel inspect *)",
+      "Bash(vercel logs *)",
+      "Bash(supabase projects list*)",
+      "Bash(supabase functions list *)",
+      "Bash(gcloud auth list*)",
+      "Bash(gcloud config list*)",
+      "Bash(kubectl config get-contexts*)",
+      "Bash(kubectl auth can-i *)"
     ],
     "ask": [
       "Bash(git push *)",
@@ -90,7 +103,16 @@
       "mcp__gmail__trash_message",
       "mcp__gmail__trash_thread",
       "mcp__gmail__mark_message_spam",
-      "mcp__gmail__mark_thread_spam"
+      "mcp__gmail__mark_thread_spam",
+      "Bash(supabase db reset *)",
+      "Bash(supabase secrets set *)",
+      "Bash(wrangler secret *)",
+      "Bash(wrangler kv:key put *)",
+      "Bash(wrangler d1 execute *)",
+      "Bash(gcloud auth login*)",
+      "Bash(gcloud config set *)",
+      "Bash(kubectl config use-context *)",
+      "Bash(kubectl config set-context *)"
     ]
   },
   "hooks": {
@@ -98,7 +120,10 @@
       {
         "matcher": "Bash|mcp__.*",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/hooks/guard-observe.sh" }
+          {
+            "type": "command",
+            "command": "$HOME/.ops-agents/hooks/guard-observe.sh"
+          }
         ]
       }
     ],
@@ -106,7 +131,10 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/hooks/ledger-touch.sh" }
+          {
+            "type": "command",
+            "command": "$HOME/.ops-agents/hooks/ledger-touch.sh"
+          }
         ]
       }
     ]

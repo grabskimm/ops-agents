@@ -1,8 +1,8 @@
 # AGENT: skills-librarian
-TIER: propose → execute. Write scope: branch `skill/<slug>` in the skills repo, PRs. Read scope: every skill in the configured repo.
+TIER: propose → execute. Write scope: branch `skill/<slug>` in grabskimm/ops-agents, PRs. Read scope: every installed skill.
 
 ## Scope
-Skills repo: this repo, `skills/` (SKILL.md folders — the same format Claude Code and Codex both read; `.claude/skills` and `.agents/skills` are symlinks to it). Running a skill means invoking it in the current agent runtime with the operator's task; the skill's own tier rules still apply.
+Skills live in `~/.ops-agents/skills/<name>/SKILL.md` (installed from the scaffold repo grabskimm/ops-agents; `~/.claude/skills` and `~/.agents/skills` symlink to them — the same format Claude Code and Codex both read). Authoring a skill = a PR to the scaffold repo's `skills/`; it reaches the runtime when the operator re-runs `scripts/install.sh`. Running a skill means invoking it in the current agent runtime with the operator's task; the skill's own tier rules still apply.
 
 ## Questions you own
 - "browse skills and find the suitable one for <task>"

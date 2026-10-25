@@ -1,21 +1,24 @@
 # ops-agents
 
-Eight-agent daily working system for a platform engineer: one orchestrator, four read-only watchers, three PR-only actors, one task ledger. Runs on Claude Code and on ChatGPT/Codex from the same prompts.
+Scaffold for an eight-agent daily working system: one orchestrator, four read-only watchers, three PR-only actors, one task ledger. Runs on Claude Code and on ChatGPT/Codex from the same prompts.
+
+**This repo is a template, not a workspace.** `scripts/setup.sh` installs the system into your user-level config (`~/.ops-agents`, `~/.claude`, `~/.codex`, `~/.agents`); agents then run from any directory. Nothing runs from, or commits back to, this repo — the only writes it ever receives are PRs from skills-librarian adding a skill.
 
 ```
-AGENTS.md              shared contract (tiers, ledger, output block); CLAUDE.md just @imports it
+AGENTS.md              shared contract (tiers, ledger, output block) → ~/.ops-agents/AGENTS.md, imported by ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md
 agents.json            per-agent settings (model, tools, MCP servers) for both runtimes
 prompts/<agent>.md     canonical prompt per agent — edit these
 scripts/build-agents.py  generates .claude/agents/*.md and .codex/agents/*.toml from the two above
-.claude/               settings.json (allow/ask/deny + hooks), agents/ (generated), rules/, skills -> ../skills
-.codex/                config.toml (mcp_servers, approval_policy), agents/ (generated), hooks.json
-.agents/skills -> ../skills   Codex skill root; same SKILL.md folders
-skills/<name>/SKILL.md shared skills (ledger first)
-hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log)
+scripts/setup.sh       end to end: ledger repo + labels, install, auth checks, prints the manual steps
+scripts/install.sh     installs into ~/.ops-agents, ~/.claude, ~/.codex, ~/.agents (idempotent; --remove undoes it)
+scripts/check-auth.sh  warns for CLIs not logged in (OAuth), proves read-only kube contexts, tests the guard
+.claude/               settings.json template (allow/ask/deny + hooks, merged into ~/.claude/settings.json), agents/ (generated → ~/.claude/agents)
+.codex/                config.toml template (→ managed block in ~/.codex/config.toml), agents/ (generated → ~/.codex/agents), hooks.json
+.mcp.json              Claude Code MCP servers, all OAuth (registered at user scope by install.sh via `claude mcp add`)
+skills/<name>/SKILL.md shared skills → ~/.ops-agents/skills, symlinked from ~/.claude/skills and ~/.agents/skills
+hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log → ~/.ops-agents/runs)
 evals/                 known-answer cases per agent
-SETUP.md + scripts/setup.sh   end-to-end setup (ledger, Claude Code, Codex); scripts/check-tokens.sh proves token tiers
-.mcp.json              Claude Code MCP servers (two GitHub entries: read token / write token)
-.env.example           every credential, with its minimum scope
+.env.example           selectors only (project ref, GCP projects, read-only kube contexts) → ~/.ops-agents/.env
 ```
 
 ## Agents
@@ -33,31 +36,27 @@ SETUP.md + scripts/setup.sh   end-to-end setup (ledger, Claude Code, Codex); scr
 
 ## Enforcement, not prose
 
-- Tokens: watchers hold read-only credentials; actors hold a write token scoped to named repos. `.env.example` lists each scope.
-- Claude Code: per-agent `tools` / `disallowedTools` / `mcpServers`, `permissions.ask` on every push and PR, `hooks/guard-observe.sh` exits 2 on mutating commands from observe-tier agents.
-- Codex: `approval_policy = "on-request"` on the parent session, two GitHub MCP servers, agent prompts name which they may use.
+- Identity: everything runs under your OAuth logins (`gh`, `gcloud`, `wrangler`, `vercel`, `supabase`, kubeconfigs); no tokens stored. So the fence is the read-only MCP modes (`X-MCP-Readonly` on GitHub, `read_only=true` on Supabase), the allow/ask/deny lists, and the guard hook — `check-auth.sh` verifies them.
+- Claude Code: per-agent `tools` / `disallowedTools` / `mcpServers`, `permissions.ask` on every push and PR, `hooks/guard-observe.sh` exits 2 on mutating commands from observe-tier agents and on any `kubectl` call that does not name a `KUBE_CONTEXTS_RO` context.
+- Codex: `approval_policy = "on-request"` on the parent session, two GitHub MCP servers (read-only header vs full), agent prompts name which they may use.
 
-## Run
+## Run (from any directory, after `scripts/setup.sh`)
 
-Claude Code — orchestrator as the main thread:
 ```
 claude --agent chief-of-staff
+codex       # then: "morning brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules"
 ```
 Headless daily brief:
 ```
 claude -p "morning brief" --agent chief-of-staff --permission-mode default --permission-prompts none --output-format json
 ```
-Codex — in the ChatGPT desktop app or CLI, with this repo open:
-```
-morning brief — spawn cloud_ops, code_triage and security_watch in parallel, wait for all, merge by the chief-of-staff rules
-```
 
 ## Edit a prompt
 
-1. Change `prompts/<agent>.md` (or a setting in `agents.json`).
-2. `python3 scripts/build-agents.py`
-3. Re-run that agent's `evals/` cases; commit prompt + generated files together.
+1. Change `prompts/<agent>.md` (or a setting in `agents.json`) in your clone of this scaffold.
+2. `scripts/install.sh` — regenerates and re-installs into user scope.
+3. Re-run that agent's `evals/` cases. Push to this repo only if the scaffold itself should change.
 
 ## Ledger
 
-`grabskimm/ops-ledger` (GitHub Issues). Create it with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*` and issue #1 titled "daily brief log" before first use. `skills/ledger/SKILL.md` has the commands.
+`grabskimm/ops-ledger` (GitHub Issues), created by `scripts/setup.sh --ledger` with labels `agent/*`, `tier/*`, `state/*`, `src/*`, `sec/*` and issue #1 "daily brief log". `skills/ledger/SKILL.md` has the commands.

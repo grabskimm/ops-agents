@@ -3,12 +3,17 @@
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "headers": { "Authorization": "Bearer ${GH_TOKEN_READ}" }
+      "headers": {
+        "Authorization": "Bearer ${GH_OAUTH_TOKEN}",
+        "X-MCP-Readonly": "true"
+      }
     },
     "github-rw": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "headers": { "Authorization": "Bearer ${GH_TOKEN_RW}" }
+      "headers": {
+        "Authorization": "Bearer ${GH_OAUTH_TOKEN}"
+      }
     },
     "cloudflare": {
       "type": "http",
@@ -19,10 +24,8 @@
       "url": "https://mcp.vercel.com"
     },
     "supabase": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref=${SUPABASE_PROJECT_REF}"],
-      "env": { "SUPABASE_ACCESS_TOKEN": "${SUPABASE_PAT_RO}" }
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?read_only=true&project_ref=${SUPABASE_PROJECT_REF}"
     }
   }
 }

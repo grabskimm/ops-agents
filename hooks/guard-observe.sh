@@ -19,8 +19,20 @@ for a in $OBSERVE_AGENTS; do
   [[ "$agent" == "$a" ]] && is_observe=1
 done
 
+# 0. kubectl: every call must name --context and it must be one of KUBE_CONTEXTS_RO (from ~/.ops-agents/.env).
+if [[ "$tool" == "Bash" && "$cmd" =~ (^|[[:space:]|;&])kubectl([[:space:]]|$) ]]; then
+  envf="${OPS_AGENTS_HOME:-$HOME/.ops-agents}/.env"; [[ -f "$envf" ]] && { set -a; source "$envf"; set +a; }
+  if [[ "$cmd" =~ config[[:space:]]+(use-context|set-context|set-credentials|set-cluster) ]]; then
+    echo "guard-observe: kubectl config changes are never allowed from an agent." >&2; exit 2; fi
+  if [[ ! "$cmd" =~ config[[:space:]]+get-contexts ]]; then
+    ctx="$(printf '%s' "$cmd" | grep -oE -- '--context[= ]+[^ ]+' | head -1 | sed -E 's/--context[= ]+//' || true)"
+    [[ -z "$ctx" ]] && { echo "guard-observe: kubectl must name --context <one of: ${KUBE_CONTEXTS_RO:-unset}>." >&2; exit 2; }
+    case ",${KUBE_CONTEXTS_RO:-}," in *",$ctx,"*) ;; *) echo "guard-observe: context '$ctx' is not in KUBE_CONTEXTS_RO." >&2; exit 2;; esac
+  fi
+fi
+
 # 1. Always-blocked patterns, every tier (belt and braces with settings.json deny).
-always_block='(git push[^|;&]*(main|master|--force|-f\b))|terraform (apply|destroy)|kubectl (apply|delete|rollout|scale|edit|patch)|helm (install|upgrade|uninstall)|wrangler (deploy|publish)|vercel (deploy|--prod|env )|gcloud [^|;&]*(create|delete|update|deploy)|gcloud iam |gh pr merge|gh api -X (POST|PUT|PATCH|DELETE)'
+always_block='(git push[^|;&]*(main|master|--force|-f\b))|terraform (apply|destroy)|kubectl (apply|delete|rollout|scale|edit|patch|exec|cp)|helm (install|upgrade|uninstall|rollback)|wrangler (deploy([[:space:]]|$)|publish|secret|kv:key put|d1 execute|delete)|vercel (deploy([[:space:]]|$)|--prod|env |rm |remove )|supabase (db (push|reset)|secrets set|functions deploy)|gcloud [^|;&]*(create|delete|update|deploy|set-iam-policy|add-iam-policy-binding)|gcloud (iam|auth login|config set)|gh pr merge|gh api -X (POST|PUT|PATCH|DELETE)'
 if [[ "$tool" == "Bash" && "$cmd" =~ $always_block ]]; then
   echo "guard-observe: '$cmd' is a mutating command; never allowed from an agent. Propose it in the ledger instead." >&2
   exit 2
