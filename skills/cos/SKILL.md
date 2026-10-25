@@ -1,7 +1,7 @@
 ---
 name: cos
 description: Hand a request to the chief-of-staff orchestrator. Use /cos <question> from any surface (CLI, desktop app, remote session) instead of claude --agent chief-of-staff.
-argument-hint: <question or routine prompt, e.g. "morning brief", "what's running", "any pending items">
+argument-hint: <question or routine prompt, e.g. "ops brief", "what's running", "any pending items">
 agent: chief-of-staff
 user-invocable: true
 disable-model-invocation: true

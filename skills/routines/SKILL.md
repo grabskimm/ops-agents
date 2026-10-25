@@ -14,7 +14,7 @@ Tier: propose → execute. Creating a timer is an execute-tier action: list the 
 ## 2. Find the scheduling tool in this session (preflight)
 Look for, in this order, and use the first that exists:
 - a Claude scheduled-task tool (names like `create_trigger`, `list_triggers`, `update_trigger`, `delete_trigger`; may need loading through tool search) — Claude app and Claude Code remote sessions
-- Claude Tag in Slack: you are in a channel; a routine is created by stating it ("every weekday at 10:00 <ZONE> run: morning brief")
+- Claude Tag in Slack: you are in a channel; a routine is created by stating it ("every weekday at 10:00 <ZONE> run: ops brief")
 - none → STATUS: needs-human, and print the manual steps from the "Where to create them" section of the catalogue, one line per platform. Never claim a schedule exists that you did not create.
 
 ## 3. List before creating

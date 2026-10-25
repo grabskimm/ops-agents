@@ -18,4 +18,4 @@ Cloud setup checklist (one-time, in claude.ai):
 1. Settings → Connectors: Gmail, Slack, Google Calendar, GitHub.
 2. Add custom connectors for Cloudflare, Vercel, Supabase (URLs above); authorize once.
 3. Fork this repo (or use it as is) and set `GITHUB_ORGS`, `LEDGER_REPO`, `SUPABASE_PROJECT_REF` as cloud environment variables, or commit `selectors.env` to your fork.
-4. Open the repo in a cloud session: `/cos morning brief`, then `/cos set up my routines`.
+4. Open the repo in a cloud session: `/cos ops brief`, then `/cos set up my routines`.

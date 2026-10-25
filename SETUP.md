@@ -52,7 +52,7 @@ The install lands in `~/.claude`, which the CLI, the desktop app's Code tab and 
 | CLI | `claude --agent chief-of-staff` or `/cos <question>` | by hand (Code tab) or `/cos set up my routines` in a remote session | not available locally |
 | Desktop app, Code tab | `/cos <question>` in any session | Routines page, or `/cos set up my routines` | via claude.ai connectors in cloud sessions |
 | claude.ai / remote session | `/cos <question>` | `/cos set up my routines` (scheduling tool present) | claude.ai connectors |
-| Slack (Claude Tag) | `@Claude <question>` in `#ops-agents` | `@Claude every weekday at 10:00 <ZONE> run: morning brief` | Slack is the channel |
+| Slack (Claude Tag) | `@Claude <question>` in `#ops-agents` | `@Claude every weekday at 10:00 <ZONE> run: ops brief` | Slack is the channel |
 
 
 ```
@@ -61,11 +61,11 @@ claude                                         # once: /mcp → authenticate clo
 claude --agent chief-of-staff                  # from any directory
 ```
 - Gmail, Slack, Google Calendar: claude.ai → Settings → Connectors (OAuth). They appear to the agents as `mcp__gmail__*`, `mcp__slack__*`, `mcp__google-calendar__*`.
-- Daily brief: Claude Code → Routines → new → weekdays, 10:00 local, prompt `morning brief`, agent `chief-of-staff` (cloud routines run without your laptop).
+- Daily brief: Claude Code → Routines → new → weekdays, 10:00 local, prompt `ops brief`, agent `chief-of-staff` (cloud routines run without your laptop).
 - Slack entry point: install Claude Tag in the workspace, invite it to `#ops-agents`; `@Claude why is CI red` then runs code-triage.
 - Headless (your own cron / CI):
   ```
-  claude -p "morning brief" --agent chief-of-staff --permission-mode default --permission-prompts none --output-format json
+  claude -p "ops brief" --agent chief-of-staff --permission-mode default --permission-prompts none --output-format json
   ```
 
 ## 2b. ChatGPT / Codex
@@ -80,7 +80,7 @@ codex plugin install gmail slack google-calendar   # Comms connectors, from gith
   ```
   Be my chief of staff. Follow ~/.codex/AGENTS.md and ~/.ops-agents/prompts/chief-of-staff.md. For a brief, spawn cloud_ops, code_triage and security_watch in parallel, wait for all, merge by the chief-of-staff rules. Comms questions use the Gmail/Slack/Calendar plugins directly. Ask before any execute-tier action.
   ```
-- Daily brief: in that thread, "set up a scheduled task: weekdays 10:00 local, send 'morning brief'".
+- Daily brief: in that thread, "set up a scheduled task: weekdays 10:00 local, send 'ops brief'".
 - Slack entry point: Codex Slack integration (workspace admin installs it); GitHub: Codex GitHub app for `@codex review` on PRs code-fixer opens.
 - Permission mode: keep the composer on **ask / on-request** before delegating; subagents inherit it.
 

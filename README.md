@@ -65,7 +65,7 @@ codex       # then: "morning brief — spawn cloud_ops, code_triage, security_wa
 ```
 Headless daily brief:
 ```
-claude -p "morning brief" --agent chief-of-staff --permission-mode default --permission-prompts none --output-format json
+claude -p "ops brief" --agent chief-of-staff --permission-mode default --permission-prompts none --output-format json
 ```
 
 ## Edit a prompt
