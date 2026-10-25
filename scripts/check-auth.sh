@@ -16,7 +16,7 @@ if have gh; then
   else bad "cannot reach github.com as you ($(head -c 200 /tmp/gh_err.$$ | tr '\n' ' ')) → unset GH_TOKEN; gh auth login -h github.com"; fi; rm -f /tmp/gh_err.$$
   [[ -n "${GH_TOKEN:-}${GITHUB_TOKEN:-}" ]] && warn "GH_TOKEN/GITHUB_TOKEN set in this shell — gh is using it, not your OAuth login"
   [[ -n "${GITHUB_ORGS:-}" ]] && ok "GITHUB_ORGS=$GITHUB_ORGS" || bad "GITHUB_ORGS not set in $OPS/.env"
-  IFS=, read -ra orgs <<< "${GITHUB_ORGS:-}"; for o in "${orgs[@]}"; do [[ -z "$o" ]] && continue; gh api "users/$o" --jq .login >/dev/null 2>&1 && ok "$o reachable" || bad "$o not reachable as $(gh api user --jq .login 2>/dev/null) — wrong account? gh auth switch -u <user>"; done
+  IFS=, read -ra orgs <<< "${GITHUB_ORGS:-}"; for o in "${orgs[@]}"; do [[ -z "$o" ]] && continue; if gh api "users/$o" --jq .login >/dev/null 2>&1; then ok "$o reachable"; elif gh repo list "$o" -L 1 >/dev/null 2>&1; then ok "$o reachable (repo list)"; else warn "$o not reachable as $(gh api user --jq .login 2>/dev/null) — wrong account (gh auth switch -u <user>), typo, or a proxy that only allows repo endpoints"; fi; done
   n="$(gh auth status 2>&1 | grep -c 'Logged in to github.com account' || true)"; [[ "${n:-0}" -gt 1 ]] && warn "$n gh accounts on github.com; agents use the ACTIVE one — gh auth switch -u <user> before a run, or list them in GH_ACCOUNTS"
   gh auth status -h github.com 2>&1 | grep -q 'Token scopes' && warn "$(gh auth status -h github.com 2>&1 | grep -o 'Token scopes:.*' | head -1) — the identity can write; tier is enforced by X-MCP-Readonly, settings.json and the guard hook"
 else bad "gh not installed"; fi

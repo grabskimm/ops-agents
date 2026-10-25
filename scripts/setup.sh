@@ -43,7 +43,12 @@ mkdir -p "$OPS"
 if [[ ! -f "$OPS/.env" ]]; then cp "$SRC/.env.example" "$OPS/.env"; warn "created $OPS/.env from template — set SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO, then re-run"; fi
 
 if [[ $DO_LEDGER -eq 1 && $GH_OK -eq 0 ]]; then warn "ledger step skipped: gh not logged in"; DO_LEDGER=0; fi
-[[ -z "${GITHUB_ORGS:-}" ]] && warn "GITHUB_ORGS not set in $OPS/.env — GitHub agents will only know the ledger org ($ORG); add every org/user they should read"
+if [[ -z "${GITHUB_ORGS:-}" && $GH_OK -eq 1 ]]; then
+  # Discover: your login + every org you belong to. Written as the PROPOSED list; review it.
+  found="$who"; for o in $(gh api user/orgs --paginate --jq '.[].login' 2>/dev/null); do found="$found,$o"; done
+  if grep -q '^GITHUB_ORGS=' "$OPS/.env"; then sed -i.bak "s#^GITHUB_ORGS=.*#GITHUB_ORGS=$found#" "$OPS/.env"; rm -f "$OPS/.env.bak"; else echo "GITHUB_ORGS=$found" >> "$OPS/.env"; fi
+  GITHUB_ORGS="$found"; warn "GITHUB_ORGS pre-filled with your login + orgs ($found) — REVIEW it in $OPS/.env: add any other user/org the agents must read (comma-separated, as many as needed), remove what they must not touch"
+elif [[ -z "${GITHUB_ORGS:-}" ]]; then warn "GITHUB_ORGS not set in $OPS/.env — list every GitHub org/user the agents may read, comma-separated (can be many)"; fi
 if [[ $GH_OK -eq 1 ]]; then
   grep -q '^LEDGER_REPO=.\+' "$OPS/.env" 2>/dev/null || { sed -i.bak "s#^LEDGER_REPO=.*#LEDGER_REPO=$LEDGER#" "$OPS/.env" 2>/dev/null && rm -f "$OPS/.env.bak"; grep -q '^LEDGER_REPO=' "$OPS/.env" || echo "LEDGER_REPO=$LEDGER" >> "$OPS/.env"; ok "LEDGER_REPO=$LEDGER written to $OPS/.env"; }
 fi
@@ -72,6 +77,9 @@ fi
 
 cat <<EOF
 == remaining manual steps
+Selectors in $OPS/.env (re-run this script after editing):
+  - GITHUB_ORGS: every GitHub org/user the agents may read — comma-separated, as many as needed (pre-filled from gh; review it)
+  - LEDGER_REPO, GCP_PROJECTS, KUBE_CONTEXTS_RO, SUPABASE_PROJECT_REF
 Claude Code:
   - claude.ai → Settings → Connectors: Gmail, Slack, Google Calendar (OAuth)
   - routines: in a Claude app / Claude Code remote session say "set up my routines" (skill creates them); CLI-only → Routines page by hand from $OPS/schedules/routines.md

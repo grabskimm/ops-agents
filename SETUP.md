@@ -19,7 +19,9 @@ Every system is reached under your own identity. That means the identity can wri
 Then set the selectors (no secrets):
 ```
 mkdir -p ~/.ops-agents && cp .env.example ~/.ops-agents/.env
-# GITHUB_ORGS (every org/user the agents may read), LEDGER_REPO, SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO
+# GITHUB_ORGS — every GitHub org/user the agents may read, comma-separated, as many as needed.
+#   setup.sh pre-fills it from gh (your login + your orgs); REVIEW it: add orgs you only have repo access to, remove ones agents must not touch.
+# LEDGER_REPO, SUPABASE_PROJECT_REF, GCP_PROJECTS, KUBE_CONTEXTS_RO
 ```
 
 ## 1. Run the setup script
