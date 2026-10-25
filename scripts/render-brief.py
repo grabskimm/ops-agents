@@ -53,6 +53,7 @@ def render(b):
     older = b.get("older", [])
     track = b.get("track", [])
     caps = b.get("capabilities", {})
+    conns = b.get("connectors", [])
     headline = b.get("headline", "")
     status = "needs-human" if any(i.get("action") in ("decide", "approve") for i in items) else "ok"
     pill = f'<span class="pill {"warn" if blind else "good"}">{len(blind)} blind spot{"s" if len(blind)!=1 else ""}</span>'
@@ -79,6 +80,7 @@ ul{{list-style:none;margin:0;padding:0}}li{{display:flex;gap:12px;padding:10px 0
 .next{{margin-top:28px;padding:14px 16px;border-radius:8px;background:var(--card);border:1px solid var(--line)}}.next b{{display:block;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}}
 details{{margin-top:22px;color:var(--mut);font-size:13px}}summary{{cursor:pointer}}pre{{white-space:pre-wrap;font-size:12px}}
 footer{{margin-top:32px;font-size:12px;color:var(--mut)}}
+table.conn{{width:100%;border-collapse:collapse;font-size:13px}}table.conn th{{text-align:left;font-weight:600;color:var(--mut);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px 6px 0}}table.conn td{{padding:6px 8px 6px 0;border-top:1px solid var(--line);vertical-align:top}}table.conn tr.failing td:nth-child(3){{color:#b42318;font-weight:600}}table.conn tr.unmapped td:nth-child(3){{color:#b54708;font-weight:600}}table.conn tr.unused td{{color:var(--mut)}}table.conn td.note{{color:var(--mut);font-size:12px}}
 </style></head><body><main>
 <header><h1>{esc(b.get("title","Brief"))}</h1><div class="sub"><span>{esc(ts)}</span><span>window: {esc(b.get("window",""))}</span>{pill}{counts}<span class="pill {"warn" if status=="needs-human" else "good"}">{status}</span></div></header>
 {f'<div class="headline">{esc(headline)}</div>' if headline else ""}
@@ -87,6 +89,7 @@ footer{{margin-top:32px;font-size:12px;color:var(--mut)}}
 {section("Not checked", ul(blind, lambda x: f'<li><span class="src">{esc(x.get("source",""))}</span> — {esc(x.get("reason",""))}' + (f'<div class="fix">fix: <code>{esc(x.get("fix"))}</code></div>' if x.get("fix") else "") + '</li>'), "blind")}
 {section("Came back clean", ul(clean, lambda x: f'<li>{esc(x)}</li>'), "clean")}
 {section("Still open from before", ul(older, item_row))}
+{section("Connectors", ("<table class=conn><tr><th>Connector</th><th>Capability</th><th>Status</th><th>Agent</th><th></th></tr>" + "".join(f"<tr class={esc(c.get('status',''))}><td>{esc(c.get('name',''))}</td><td>{esc(c.get('capability',''))}</td><td>{esc(c.get('status',''))}</td><td>{esc(c.get('agent',''))}</td><td class=note>{esc(c.get('note',''))}</td></tr>" for c in sorted(conns, key=lambda c: ({'failing':0,'unmapped':1,'used':2,'unused':3}.get(c.get('status',''),4), c.get('name','')))) + "</table>") if conns else "")}
 {section("Track?", ('<div class="track"><p>Reply "track" (optionally naming items) to open ledger issues for:</p>' + ul(track, lambda x: f'<li>{esc(x)}</li>') + '</div>') if track else "")}
 {f'<div class="next"><b>Next</b>{esc(b.get("next",""))}</div>' if b.get("next") else ""}
 <details><summary>Capabilities</summary><pre>{esc(json.dumps(caps, indent=2) if caps else "")}</pre></details>

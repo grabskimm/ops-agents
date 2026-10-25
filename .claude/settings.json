@@ -67,7 +67,11 @@
       "mcp__gmail__create_draft",
       "mcp__gmail__update_draft",
       "mcp__Gmail__create_draft",
-      "mcp__Gmail__update_draft"
+      "mcp__Gmail__update_draft",
+      "mcp__Microsoft_365__outlook_create_draft",
+      "mcp__Microsoft_365__outlook_create_reply_draft",
+      "mcp__Microsoft_365__outlook_create_reply_all_draft",
+      "mcp__Microsoft_365__outlook_update_draft"
     ],
     "deny": [
       "Bash(git push * main*)",
@@ -135,7 +139,19 @@
       "mcp__google-calendar__create_event",
       "mcp__google-calendar__update_event",
       "mcp__google-calendar__delete_event",
-      "mcp__google-calendar__respond_to_event"
+      "mcp__google-calendar__respond_to_event",
+      "mcp__Microsoft_365__outlook_send_mail",
+      "mcp__Microsoft_365__outlook_send_draft",
+      "mcp__Microsoft_365__outlook_forward_mail",
+      "mcp__Microsoft_365__outlook_batch_delete_messages",
+      "mcp__Microsoft_365__outlook_trash_thread",
+      "mcp__Microsoft_365__teams_send_channel_message",
+      "mcp__Microsoft_365__teams_send_chat_message",
+      "mcp__Microsoft_365__teams_reply_channel_message",
+      "mcp__Microsoft_365__outlook_create_event",
+      "mcp__Microsoft_365__outlook_update_event",
+      "mcp__Microsoft_365__outlook_delete_event",
+      "mcp__Microsoft_365__outlook_respond_to_event"
     ]
   },
   "hooks": {

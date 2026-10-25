@@ -45,10 +45,16 @@ if [[ $is_observe -eq 1 ]]; then
     echo "guard-observe: agent '$agent' is observe-tier; '$cmd' writes. Report it as an ITEM with action=approve." >&2
     exit 2
   fi
-  # chief-of-staff may write its brief files only.
-  if [[ "$tool" == "Write" ]] && printf '%s' "$input" | jq -e '.tool_input.file_path | test("/.ops-agents/briefs/")' >/dev/null 2>&1; then exit 0; fi
+  # chief-of-staff may write its brief files only (local or cloud briefs dir); no other observe agent writes files.
+  if [[ "$tool" == "Write" ]]; then
+    if [[ "$agent" == "chief-of-staff" ]] && printf '%s' "$input" | jq -e '.tool_input.file_path | test("/(\\.ops-agents/)?briefs/")' >/dev/null 2>&1; then exit 0; fi
+    echo "guard-observe: agent '$agent' is observe-tier; Write is only allowed for chief-of-staff briefs." >&2; exit 2
+  fi
   case "$tool" in
-    Write|Edit|NotebookEdit|mcp__github-rw__*|mcp__gmail__send_message|mcp__gmail__reply|mcp__gmail__forward|mcp__gmail__trash_*|mcp__*__create_*|mcp__*__update_*|mcp__*__delete_*|mcp__*__send_*)
+    *create_draft*|*update_draft*|*create_reply_draft*|*create_reply_all_draft*) exit 0 ;;   # drafts are propose-tier output
+  esac
+  case "$tool" in
+    Edit|NotebookEdit|mcp__github-rw__*|mcp__*__send_*|mcp__*__*_send*|mcp__*__reply*|mcp__*__forward*|mcp__*__trash_*|mcp__*__create_*|mcp__*__*_create*|mcp__*__update_*|mcp__*__*_update*|mcp__*__delete_*|mcp__*__*_delete*|mcp__*__*_edit|mcp__*__share_*|mcp__*__upload_*|mcp__*__*_upload*|mcp__*__*_deploy*|mcp__*__*_put*|mcp__*__*_execute*|mcp__*__*_publish*|mcp__*__respond_*|mcp__*__*_respond*|mcp__*__set_*|mcp__*__*_set_*|mcp__*__label_*|mcp__*__mark_*|mcp__*__*_mark_*|mcp__*__*_write*)
       echo "guard-observe: agent '$agent' is observe-tier; tool '$tool' mutates." >&2
       exit 2
       ;;

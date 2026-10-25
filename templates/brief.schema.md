@@ -21,11 +21,20 @@ Written by chief-of-staff to `~/.ops-agents/briefs/<YYYY-MM-DD-HHMM>.json`, rend
   ],
   "track": ["VM verification failure (code-triage hand-off to code-fixer)"],
   "next": "Say whether code-triage should trace the dev VM failure; connect the missing sources and re-run.",
+  "connectors": [
+    {"name": "Gmail", "capability": "mail", "status": "used", "agent": "comms"},
+    {"name": "Microsoft_365", "capability": "mail, calendar, chat", "status": "used", "agent": "comms"},
+    {"name": "Cloudflare_Developer_Platform", "capability": "edge", "status": "used", "agent": "cloud-ops, security-watch", "note": "deprecated bindings server"},
+    {"name": "Slack", "capability": "chat", "status": "failing", "agent": "comms", "note": "proxy 403"},
+    {"name": "Booking_com", "capability": "travel", "status": "unused"},
+    {"name": "Acme_Thing", "capability": "?", "status": "unmapped"}
+  ],
   "capabilities": {"available": ["gh", "github MCP", "gcloud"], "missing": ["Gmail/Slack/Calendar"], "not_checked": ["Cloud Build", "kube"]}
 }
 ```
 
 Rules for the writer:
+- `connectors` lists EVERY connector in the session once; `status` ∈ used|unused|unmapped|failing.
 - `priority` ∈ P0|P1|P2; `action` ∈ decide|approve|review|none. Blind spots go in `not_checked`, never in `items`.
 - `window` is explicit ISO with offset, start → end; the same string is passed to every specialist.
 - `track` lists only what is worth a ledger issue; the operator answers "track".

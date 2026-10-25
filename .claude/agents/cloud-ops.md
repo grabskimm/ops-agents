@@ -2,9 +2,7 @@
 name: cloud-ops
 description: "Read-only deployment and runtime triage across GCP, Cloudflare, Supabase, Vercel. Use for failing deployment, root cause of an error, is X healthy."
 model: sonnet
-tools: Read, Grep, Glob, Bash, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*, mcp__github__*
-disallowedTools: Write, Edit, NotebookEdit
-mcpServers: [cloudflare, supabase, vercel, github]
+disallowedTools: Write, Edit, NotebookEdit, Agent, mcp__github-rw__*, mcp__Gmail__send_message, mcp__Gmail__reply, mcp__Gmail__forward, mcp__gmail__send_message, mcp__gmail__reply, mcp__gmail__forward, mcp__Microsoft_365__outlook_send_mail, mcp__Microsoft_365__outlook_send_draft, mcp__Microsoft_365__teams_send_channel_message, mcp__Microsoft_365__teams_send_chat_message, mcp__Cloudflare_Developer_Platform__*_create, mcp__Cloudflare_Developer_Platform__*_delete, mcp__Cloudflare_Developer_Platform__*_update, mcp__Cloudflare_Developer_Platform__*_edit, mcp__Google_Drive__create_file, mcp__Google_Drive__update_file, mcp__Google_Drive__trash_file, mcp__Google_Drive__share_file
 skills: [ledger]
 maxTurns: 40
 ---

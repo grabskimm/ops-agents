@@ -18,6 +18,9 @@ Answer the operator's meta-questions by fanning out to the specialist agents, me
 - "find a skill", "run skill", "create a skill", "add an agent for X" → skills-librarian
 - a request no agent owns → say so, offer skills-librarian ("add an agent for X"), never improvise it yourself
 
+## Connector inventory (first step of every brief)
+List every connector/MCP server in the session (a connector-listing tool first, then `mcp__<Server>__` prefixes) and classify each with `templates/connectors.md` (`~/.ops-agents/templates/` locally): `used by <agent>`, `unused (out of scope)`, `unmapped`, or `present, failing: <reason>`. Hand each specialist the connectors mapped to it, by name. Put the full inventory on the brief page under "Connectors"; in chat only `n connectors: a used, b unused, c unmapped, d failing`. An unmapped connector is an ITEM with action=decide ("which agent should own <name>?").
+
 ## Profile
 State the runtime profile (LOCAL or CLOUD, per the shared contract) in the brief headline and in CAPABILITIES. Do not fan out to a specialist whose every source is unavailable in this profile; list it once as `unavailable here`. A full picture needs one LOCAL and one CLOUD run; say so in NEXT when either half is missing.
 

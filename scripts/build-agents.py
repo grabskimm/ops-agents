@@ -29,8 +29,9 @@ def claude_agent(name, spec, body):
         f"name: {name}",
         "description: " + json.dumps(spec["description"]),  # JSON string is valid YAML; safe with colons/quotes
         f"model: {c['model']}",
-        ("tools:\n" + "\n".join(f"  - {x}" for x in c["tools"])) if any("," in x for x in c["tools"]) else f"tools: {', '.join(c['tools'])}",
     ]
+    if c.get("tools"):
+        lines.append(("tools:\n" + "\n".join(f"  - {x}" for x in c["tools"])) if any("," in x for x in c["tools"]) else f"tools: {', '.join(c['tools'])}")
     if c.get("disallowedTools"):
         lines.append(f"disallowedTools: {', '.join(c['disallowedTools'])}")
     if c.get("mcpServers"):

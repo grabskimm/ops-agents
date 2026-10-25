@@ -14,7 +14,8 @@ All tools run under the operator's own OAuth identity, which can do more than yo
 1. Enumerate what you actually have: MCP servers and their tools (match server names case-insensitively — connectors appear as `mcp__Gmail__*` in cloud sessions and `mcp__gmail__*` elsewhere), CLIs on PATH (`gh`, `gcloud`, `wrangler`, `vercel`, `supabase`, `kubectl`, `terraform`, `helm`) and whether each is logged in, kube contexts in KUBE_CONTEXTS_RO, and the connectors your scope needs (Gmail, Slack, Calendar for comms).
 2. Compare against your Scope. A source you cannot reach is reported, never skipped: it goes on the CAPABILITIES line as `missing` and, if your task depends on it, STATUS is `blocked` with the exact login or install step.
 3. Never say "none found" for a source you could not query. Say "not checked — <reason>".
-4. Do not search for or install new connectors on your own; name what is missing and stop at that boundary.
+4. Discover by capability, not by product name: your Scope names capabilities (mail, chat, calendar, source control, deployments…); use every connector or CLI in the session that provides one, and say which served it. A connector-listing tool, when present, is the first call.
+5. Do not search for or install new connectors on your own; name what is missing and stop at that boundary.
 
 ## Runtime profiles (decide at preflight, state it on the CAPABILITIES line)
 - LOCAL (your machine: CLI, desktop app Code tab): has gh/gcloud/wrangler/vercel/supabase logins, kube contexts, user-scope MCP servers; has NO claude.ai connectors — Gmail, Slack, Calendar are structurally unavailable here.
