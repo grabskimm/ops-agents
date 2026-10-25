@@ -41,7 +41,17 @@ Removal: `OPS_AGENTS_KEEP=1 curl … | bash -s -- --install` prints the kept pat
 
 `setup.sh` never fails on a missing login, OAuth, MCP or CLI — it warns, skips that step, installs everything else, and ends with a WARNINGS count. Any ✘ from `check-auth.sh` is a missing login or a kube context that is not read-only; fix it, re-run `setup.sh`.
 
-## 2a. Claude Code
+## 2a. Claude Code (CLI and desktop app share the same install)
+
+The install lands in `~/.claude`, which the CLI, the desktop app's Code tab and remote sessions all read: agents, skills, settings/hooks, the `CLAUDE.md` import and the user-scope MCP servers. Entry points by surface:
+
+| Surface | Start the orchestrator | Routines | Gmail/Slack/Calendar |
+| --- | --- | --- | --- |
+| CLI | `claude --agent chief-of-staff` or `/cos <question>` | by hand (Code tab) or `/cos set up my routines` in a remote session | not available locally |
+| Desktop app, Code tab | `/cos <question>` in any session | Routines page, or `/cos set up my routines` | via claude.ai connectors in cloud sessions |
+| claude.ai / remote session | `/cos <question>` | `/cos set up my routines` (scheduling tool present) | claude.ai connectors |
+| Slack (Claude Tag) | `@Claude <question>` in `#ops-agents` | `@Claude every weekday at 10:00 <ZONE> run: morning brief` | Slack is the channel |
+
 
 ```
 npm install -g @anthropic-ai/claude-code      # if missing

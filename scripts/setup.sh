@@ -76,7 +76,7 @@ Claude Code:
   - routines: in a Claude app / Claude Code remote session say "set up my routines" (skill creates them); CLI-only → Routines page by hand from $OPS/schedules/routines.md
   - Slack: install Claude Tag, invite to #ops-agents
   - claude → /mcp → authenticate cloudflare, vercel, supabase (OAuth, once)
-  - run:  claude --agent chief-of-staff     (from any directory)
+  - run:  claude --agent chief-of-staff   (CLI)   |   /cos <question>   (CLI, desktop app Code tab, remote sessions)
 Codex:
   - codex plugin install gmail slack google-calendar
   - add  set -a; . $OPS/.env; set +a  to your shell profile (Codex reads \${GH_OAUTH_TOKEN}, \${SUPABASE_PROJECT_REF} from env)

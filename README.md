@@ -22,7 +22,7 @@ scripts/check-auth.sh  warns for CLIs not logged in (OAuth), proves read-only ku
 .claude/               settings.json template (allow/ask/deny + hooks, merged into ~/.claude/settings.json), agents/ (generated → ~/.claude/agents)
 .codex/                config.toml template (→ managed block in ~/.codex/config.toml), agents/ (generated → ~/.codex/agents), hooks.json
 .mcp.json              Claude Code MCP servers, all OAuth (registered at user scope by install.sh via `claude mcp add`)
-skills/<name>/SKILL.md shared skills → ~/.ops-agents/skills, symlinked from ~/.claude/skills and ~/.agents/skills
+skills/<name>/SKILL.md shared skills (ledger, routines, cos = /cos entry point) → ~/.ops-agents/skills, symlinked from ~/.claude/skills and ~/.agents/skills
 hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log → ~/.ops-agents/runs)
 evals/                 known-answer cases per agent
 schedules/routines.md  the timer prompts the chief-of-staff handles (brief, sweep, stale check, PR nudge, retro); skills/routines creates them via the session's scheduling tool
@@ -53,7 +53,8 @@ schedules/routines.md  the timer prompts the chief-of-staff handles (brief, swee
 `chief-of-staff` is installed as an agent like the others, restricted to spawning the seven specialists plus the read-only GitHub server for the ledger.
 
 ```
-claude --agent chief-of-staff
+claude --agent chief-of-staff      # CLI
+/cos <question>                    # any surface: CLI, desktop app Code tab, remote session
 codex       # then: "morning brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules"
 ```
 Headless daily brief:
