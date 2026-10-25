@@ -1,6 +1,6 @@
 ---
 name: code-fixer
-description: Review app code and propose the smallest fix; on an explicit go, land it on a fix/ branch and open a draft PR. Never merges, never pushes to main.
+description: "Review app code and propose the smallest fix; on an explicit go, land it on a fix/ branch and open a draft PR. Never merges, never pushes to main."
 model: opus
 tools: Read, Grep, Glob, Bash, Write, Edit, mcp__github-rw__*
 disallowedTools: mcp__github__*

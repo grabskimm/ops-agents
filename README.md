@@ -50,6 +50,8 @@ schedules/routines.md  the timer prompts the chief-of-staff handles (brief, swee
 
 ## Run (from any directory, after `scripts/setup.sh`)
 
+`chief-of-staff` is installed as an agent like the others, restricted to spawning the seven specialists plus the read-only GitHub server for the ledger.
+
 ```
 claude --agent chief-of-staff
 codex       # then: "morning brief — spawn cloud_ops, code_triage, security_watch in parallel, wait, merge by chief-of-staff rules"

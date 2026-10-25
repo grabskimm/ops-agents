@@ -1,6 +1,6 @@
 ---
 name: skills-librarian
-description: Find, run and author SKILL.md skills in this repo; PR-only writes. Use for find a skill for X, run skill X, create a skill from this workflow.
+description: "Find, run and author SKILL.md skills in this repo; PR-only writes. Use for find a skill for X, run skill X, create a skill from this workflow."
 model: sonnet
 tools: Read, Grep, Glob, Bash, Write, Edit, Skill, mcp__github-rw__*
 disallowedTools: mcp__github__*

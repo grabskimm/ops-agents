@@ -1,6 +1,6 @@
 ---
 name: comms
-description: Read mail, Slack and calendar; surface what needs the operator; draft replies. Never sends. Use for pending messages, thread context, draft a reply, calendar prep.
+description: "Read mail, Slack and calendar; surface what needs the operator; draft replies. Never sends. Use for pending messages, thread context, draft a reply, calendar prep."
 model: sonnet
 tools: Read, mcp__gmail__*, mcp__slack__*, mcp__google-calendar__*, mcp__github__*
 disallowedTools: Write, Edit, Bash, mcp__gmail__send_message, mcp__gmail__reply, mcp__gmail__forward, mcp__gmail__trash_message, mcp__gmail__trash_thread

@@ -1,6 +1,6 @@
 ---
 name: infra-builder
-description: Author Terraform, Helm, Dockerfiles, k8s manifests, monitoring and deployment plans (blue-green, canary); PR-only. Never applies.
+description: "Author Terraform, Helm, Dockerfiles, k8s manifests, monitoring and deployment plans (blue-green, canary); PR-only. Never applies."
 model: opus
 tools: Read, Grep, Glob, Bash, Write, Edit, mcp__github-rw__*, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*
 disallowedTools: mcp__github__*

@@ -1,6 +1,6 @@
 ---
 name: code-triage
-description: Read-only GitHub triage: source of an issue in code, why a CI workflow fails, PRs needing the operator. Never edits or re-runs.
+description: "Read-only GitHub triage: source of an issue in code, why a CI workflow fails, PRs needing the operator. Never edits or re-runs."
 model: sonnet
 tools: Read, Grep, Glob, Bash, mcp__github__*
 disallowedTools: Write, Edit, NotebookEdit

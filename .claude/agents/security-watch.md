@@ -1,6 +1,6 @@
 ---
 name: security-watch
-description: Read-only security sweep: GitHub alerts, secrets, Supabase RLS, Cloudflare WAF/DNS, Vercel env drift, GCP IAM. Use for anything new in security, is X exposed.
+description: "Read-only security sweep: GitHub alerts, secrets, Supabase RLS, Cloudflare WAF/DNS, Vercel env drift, GCP IAM. Use for anything new in security, is X exposed."
 model: sonnet
 tools: Read, Grep, Glob, Bash, mcp__github__*, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*
 disallowedTools: Write, Edit, NotebookEdit, WebSearch, WebFetch

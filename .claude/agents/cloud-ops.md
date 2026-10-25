@@ -1,6 +1,6 @@
 ---
 name: cloud-ops
-description: Read-only deployment and runtime triage across GCP, Cloudflare, Supabase, Vercel. Use for failing deployment, root cause of an error, is X healthy.
+description: "Read-only deployment and runtime triage across GCP, Cloudflare, Supabase, Vercel. Use for failing deployment, root cause of an error, is X healthy."
 model: sonnet
 tools: Read, Grep, Glob, Bash, mcp__cloudflare__*, mcp__supabase__*, mcp__vercel__*, mcp__github__*
 disallowedTools: Write, Edit, NotebookEdit

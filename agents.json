@@ -1,96 +1,333 @@
 {
   "_comment": "Single source for per-agent settings. prompts/<name>.md is the body. scripts/build-agents.py writes .claude/agents/<name>.md and .codex/agents/<name>.toml.",
   "agents": {
+    "chief-of-staff": {
+      "description": "Orchestrator: routes to the seven specialists, merges their output blocks into one ranked list, runs the daily brief and other scheduled prompts. Never touches a system directly; ledger only.",
+      "tier": "route+merge",
+      "claude": {
+        "model": "opus",
+        "tools": [
+          "Agent(comms, cloud-ops, code-triage, security-watch, code-fixer, infra-builder, skills-librarian)",
+          "Read",
+          "Skill",
+          "Bash",
+          "mcp__github__*"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit",
+          "mcp__github-rw__*",
+          "mcp__cloudflare__*",
+          "mcp__supabase__*",
+          "mcp__vercel__*",
+          "mcp__gmail__*",
+          "mcp__slack__*",
+          "mcp__google-calendar__*"
+        ],
+        "mcpServers": [
+          "github"
+        ],
+        "skills": [
+          "ledger",
+          "routines"
+        ],
+        "maxTurns": 60
+      },
+      "codex": {
+        "model": "gpt-6.1-sol",
+        "model_reasoning_effort": "medium",
+        "features": {
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_ro"
+        ]
+      }
+    },
     "comms": {
       "description": "Read mail, Slack and calendar; surface what needs the operator; draft replies. Never sends. Use for pending messages, thread context, draft a reply, calendar prep.",
       "tier": "observe->propose",
       "claude": {
         "model": "sonnet",
-        "tools": ["Read", "mcp__gmail__*", "mcp__slack__*", "mcp__google-calendar__*", "mcp__github__*"],
-        "disallowedTools": ["Write", "Edit", "Bash", "mcp__gmail__send_message", "mcp__gmail__reply", "mcp__gmail__forward", "mcp__gmail__trash_message", "mcp__gmail__trash_thread"],
-        "mcpServers": ["github"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "mcp__gmail__*",
+          "mcp__slack__*",
+          "mcp__google-calendar__*",
+          "mcp__github__*"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "Bash",
+          "mcp__gmail__send_message",
+          "mcp__gmail__reply",
+          "mcp__gmail__forward",
+          "mcp__gmail__trash_message",
+          "mcp__gmail__trash_thread"
+        ],
+        "mcpServers": [
+          "github"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 30
       },
-      "codex": { "model": "gpt-6-luna", "model_reasoning_effort": "medium", "features": { "shell_tool": false, "apps": false }, "allowed_mcp": ["github_ro"] }
+      "codex": {
+        "model": "gpt-6-luna",
+        "model_reasoning_effort": "medium",
+        "features": {
+          "shell_tool": false,
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_ro"
+        ]
+      }
     },
     "cloud-ops": {
       "description": "Read-only deployment and runtime triage across GCP, Cloudflare, Supabase, Vercel. Use for failing deployment, root cause of an error, is X healthy.",
       "tier": "observe",
       "claude": {
         "model": "sonnet",
-        "tools": ["Read", "Grep", "Glob", "Bash", "mcp__cloudflare__*", "mcp__supabase__*", "mcp__vercel__*", "mcp__github__*"],
-        "disallowedTools": ["Write", "Edit", "NotebookEdit"],
-        "mcpServers": ["cloudflare", "supabase", "vercel", "github"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "mcp__cloudflare__*",
+          "mcp__supabase__*",
+          "mcp__vercel__*",
+          "mcp__github__*"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit"
+        ],
+        "mcpServers": [
+          "cloudflare",
+          "supabase",
+          "vercel",
+          "github"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 40
       },
-      "codex": { "model": "gpt-6-luna", "model_reasoning_effort": "high", "features": { "apps": false }, "allowed_mcp": ["github_ro", "cloudflare", "supabase", "vercel"] }
+      "codex": {
+        "model": "gpt-6-luna",
+        "model_reasoning_effort": "high",
+        "features": {
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_ro",
+          "cloudflare",
+          "supabase",
+          "vercel"
+        ]
+      }
     },
     "code-triage": {
       "description": "Read-only GitHub triage: source of an issue in code, why a CI workflow fails, PRs needing the operator. Never edits or re-runs.",
       "tier": "observe",
       "claude": {
         "model": "sonnet",
-        "tools": ["Read", "Grep", "Glob", "Bash", "mcp__github__*"],
-        "disallowedTools": ["Write", "Edit", "NotebookEdit"],
-        "mcpServers": ["github"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "mcp__github__*"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit"
+        ],
+        "mcpServers": [
+          "github"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 40
       },
-      "codex": { "model": "gpt-6-luna", "model_reasoning_effort": "high", "features": { "apps": false }, "allowed_mcp": ["github_ro"] }
+      "codex": {
+        "model": "gpt-6-luna",
+        "model_reasoning_effort": "high",
+        "features": {
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_ro"
+        ]
+      }
     },
     "security-watch": {
       "description": "Read-only security sweep: GitHub alerts, secrets, Supabase RLS, Cloudflare WAF/DNS, Vercel env drift, GCP IAM. Use for anything new in security, is X exposed.",
       "tier": "observe",
       "claude": {
         "model": "sonnet",
-        "tools": ["Read", "Grep", "Glob", "Bash", "mcp__github__*", "mcp__cloudflare__*", "mcp__supabase__*", "mcp__vercel__*"],
-        "disallowedTools": ["Write", "Edit", "NotebookEdit", "WebSearch", "WebFetch"],
-        "mcpServers": ["github", "cloudflare", "supabase", "vercel"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "mcp__github__*",
+          "mcp__cloudflare__*",
+          "mcp__supabase__*",
+          "mcp__vercel__*"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit",
+          "WebSearch",
+          "WebFetch"
+        ],
+        "mcpServers": [
+          "github",
+          "cloudflare",
+          "supabase",
+          "vercel"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 40
       },
-      "codex": { "model": "gpt-6-luna", "model_reasoning_effort": "high", "features": { "apps": false }, "allowed_mcp": ["github_ro", "cloudflare", "supabase", "vercel"] }
+      "codex": {
+        "model": "gpt-6-luna",
+        "model_reasoning_effort": "high",
+        "features": {
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_ro",
+          "cloudflare",
+          "supabase",
+          "vercel"
+        ]
+      }
     },
     "code-fixer": {
       "description": "Review app code and propose the smallest fix; on an explicit go, land it on a fix/ branch and open a draft PR. Never merges, never pushes to main.",
       "tier": "propose->execute",
       "claude": {
         "model": "opus",
-        "tools": ["Read", "Grep", "Glob", "Bash", "Write", "Edit", "mcp__github-rw__*"],
-        "disallowedTools": ["mcp__github__*"],
-        "mcpServers": ["github-rw"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "Write",
+          "Edit",
+          "mcp__github-rw__*"
+        ],
+        "disallowedTools": [
+          "mcp__github__*"
+        ],
+        "mcpServers": [
+          "github-rw"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 80
       },
-      "codex": { "model": "gpt-6.1-sol", "model_reasoning_effort": "medium", "features": {}, "allowed_mcp": ["github_rw"] }
+      "codex": {
+        "model": "gpt-6.1-sol",
+        "model_reasoning_effort": "medium",
+        "features": {},
+        "allowed_mcp": [
+          "github_rw"
+        ]
+      }
     },
     "infra-builder": {
       "description": "Author Terraform, Helm, Dockerfiles, k8s manifests, monitoring and deployment plans (blue-green, canary); PR-only. Never applies.",
       "tier": "propose->execute",
       "claude": {
         "model": "opus",
-        "tools": ["Read", "Grep", "Glob", "Bash", "Write", "Edit", "mcp__github-rw__*", "mcp__cloudflare__*", "mcp__supabase__*", "mcp__vercel__*"],
-        "disallowedTools": ["mcp__github__*"],
-        "mcpServers": ["github-rw", "cloudflare", "supabase", "vercel"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "Write",
+          "Edit",
+          "mcp__github-rw__*",
+          "mcp__cloudflare__*",
+          "mcp__supabase__*",
+          "mcp__vercel__*"
+        ],
+        "disallowedTools": [
+          "mcp__github__*"
+        ],
+        "mcpServers": [
+          "github-rw",
+          "cloudflare",
+          "supabase",
+          "vercel"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 80
       },
-      "codex": { "model": "gpt-6.1-sol", "model_reasoning_effort": "medium", "features": {}, "allowed_mcp": ["github_rw", "cloudflare", "supabase", "vercel"] }
+      "codex": {
+        "model": "gpt-6.1-sol",
+        "model_reasoning_effort": "medium",
+        "features": {},
+        "allowed_mcp": [
+          "github_rw",
+          "cloudflare",
+          "supabase",
+          "vercel"
+        ]
+      }
     },
     "skills-librarian": {
       "description": "Find, run and author SKILL.md skills in this repo; PR-only writes. Use for find a skill for X, run skill X, create a skill from this workflow.",
       "tier": "propose->execute",
       "claude": {
         "model": "sonnet",
-        "tools": ["Read", "Grep", "Glob", "Bash", "Write", "Edit", "Skill", "mcp__github-rw__*"],
-        "disallowedTools": ["mcp__github__*"],
-        "mcpServers": ["github-rw"],
-        "skills": ["ledger"],
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "Write",
+          "Edit",
+          "Skill",
+          "mcp__github-rw__*"
+        ],
+        "disallowedTools": [
+          "mcp__github__*"
+        ],
+        "mcpServers": [
+          "github-rw"
+        ],
+        "skills": [
+          "ledger"
+        ],
         "maxTurns": 60
       },
-      "codex": { "model": "gpt-6-luna", "model_reasoning_effort": "high", "features": { "apps": false }, "allowed_mcp": ["github_rw"] }
+      "codex": {
+        "model": "gpt-6-luna",
+        "model_reasoning_effort": "high",
+        "features": {
+          "apps": false
+        },
+        "allowed_mcp": [
+          "github_rw"
+        ]
+      }
     }
   }
 }
