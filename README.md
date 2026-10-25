@@ -13,6 +13,7 @@ scripts/build-agents.py  generates .claude/agents/*.md and .codex/agents/*.toml 
 skills/<name>/SKILL.md shared skills (ledger first)
 hooks/                 guard-observe.sh (PreToolUse tier guard), ledger-touch.sh (SubagentStop run log)
 evals/                 known-answer cases per agent
+SETUP.md + scripts/setup.sh   end-to-end setup (ledger, Claude Code, Codex); scripts/check-tokens.sh proves token tiers
 .mcp.json              Claude Code MCP servers (two GitHub entries: read token / write token)
 .env.example           every credential, with its minimum scope
 ```
